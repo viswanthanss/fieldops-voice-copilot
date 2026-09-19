@@ -52,4 +52,5 @@ export interface SessionResponse {
   livekit_url: string;
   auth_context: AuthContext;
   expires_at: string;
+  is_demo?: boolean;
 }

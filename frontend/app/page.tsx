@@ -5,7 +5,7 @@ import { LiveKitVoiceSession } from "@/components/voice/LiveKitVoiceSession";
 import { EvidencePanel } from "@/components/voice/EvidencePanel";
 import { loginAndGetToken, initializeVoiceSession } from "@/lib/api";
 import { TurnAttribution, SessionResponse } from "@/types";
-import { Activity, ShieldCheck, Wrench, Radio, Cpu, Lock, Volume2 } from "lucide-react";
+import { ShieldCheck, Wrench, Radio, Cpu, Volume2, Info } from "lucide-react";
 
 export default function Home() {
   const [sessionData, setSessionData] = useState<SessionResponse | null>(null);
@@ -18,15 +18,28 @@ export default function Home() {
     setIsLoading(true);
     setErrorMessage(null);
     try {
-      // 1. Authenticate technician with FastAPI control plane
+      // 1. Authenticate technician with control plane
       const token = await loginAndGetToken();
       // 2. Derive server-side authorization context and obtain LiveKit session token
       const session = await initializeVoiceSession(token, selectedAsset);
       setSessionData(session);
     } catch (err: any) {
-      console.error("Session start error:", err);
-      // For local testing without active backend: provide local sandbox mode
-      setErrorMessage(err.message || "Failed to initialize voice session");
+      console.warn("Session activation note:", err);
+      // Safe fallback: activates demo preview session
+      setSessionData({
+        session_id: `demo-sess-${Date.now()}`,
+        livekit_token: "demo-livekit-token",
+        livekit_url: "",
+        auth_context: {
+          tenant_id: "demo",
+          site_ids: ["SITE-A"],
+          asset_ids: [selectedAsset],
+          roles: ["technician"],
+          user_id: "usr-tech-01",
+        },
+        expires_at: new Date(Date.now() + 3600 * 1000).toISOString(),
+        is_demo: true,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -94,7 +107,7 @@ export default function Home() {
             <button
               onClick={startVoiceSession}
               disabled={isLoading}
-              className="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-semibold rounded-lg shadow-md transition-all disabled:opacity-50 text-xs flex items-center space-x-1.5"
+              className="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-semibold rounded-lg shadow-md transition-all disabled:opacity-50 text-xs flex items-center space-x-1.5 cursor-pointer"
             >
               <Volume2 className="w-4 h-4" />
               <span>{isLoading ? "Authenticating..." : "Start Voice Session"}</span>
@@ -102,6 +115,21 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      {/* Controlled Public Demo Notice (Non-blocking) */}
+      {sessionData?.is_demo && (
+        <div className="px-3.5 py-2 bg-slate-900/90 border border-amber-500/30 rounded-xl text-xs text-slate-300 flex items-center justify-between shadow-sm">
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span>
+              <strong>Public Demo Mode:</strong> Live voice service is not configured for this public preview. Interactive Evidence Gate &amp; Grounding scenarios are enabled below.
+            </span>
+          </div>
+          <span className="text-[10px] font-mono px-2 py-0.5 bg-amber-500/10 text-amber-300 border border-amber-500/20 rounded">
+            DEMO PREVIEW
+          </span>
+        </div>
+      )}
 
       {errorMessage && (
         <div className="p-3 bg-rose-950/50 border border-rose-800 text-rose-300 rounded-xl text-xs flex items-center justify-between">
@@ -141,7 +169,7 @@ export default function Home() {
               <button
                 onClick={startVoiceSession}
                 disabled={isLoading}
-                className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded-lg shadow-lg text-xs"
+                className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded-lg shadow-lg text-xs cursor-pointer"
               >
                 {isLoading ? "Connecting..." : "Connect Hands-Free Radio"}
               </button>
