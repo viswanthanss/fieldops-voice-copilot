@@ -1,0 +1,525 @@
+---
+document_id: CP300-SVC-001
+document_type: service_manual
+equipment_type: compressor
+model: CP-300
+tenant_id: demo
+site_id: SITE-B
+revision: 2
+effective_date: 2024-03-01
+---
+
+================================================================================
+INDUSTRIALWORKS CORPORATION
+COMPRESSOR CP-300 SERIES SERVICE MANUAL
+Part Number: IW-SM-CP300-R2
+Revision: 2  |  Effective Date: March 1, 2024
+================================================================================
+
+SECTION 1 — EQUIPMENT OVERVIEW
+-------------------------------------------------------------------------------
+
+1.1  Product Family Description
+
+The CP-300 Series industrial screw compressors represent IndustrialWorks Corporation's
+next-generation variable-speed compression platform. Unlike the fixed-speed CP-200
+Series (reciprocating), the CP-300 Series uses twin-helical screw rotors driven by
+a Variable Frequency Drive (VFD) for precise speed and capacity control. This manual
+covers the following models:
+
+  CP-300   — Single-stage screw, 100 HP, 150 PSIG max, VFD-driven, air-cooled
+  CP-301   — Single-stage screw, 150 HP, 175 PSIG max, VFD-driven, water-cooled
+  CP-302   — Two-stage screw, 200 HP, 200 PSIG max, dual VFD, water-cooled
+
+The CP-300 family uses a fundamentally different control architecture from the CP-200
+series: the IW-CTRL-5000 controller, a 7-inch color touchscreen HMI, and an integrated
+VFD monitoring subsystem. Many error codes overlap numerically with CP-200 codes but
+carry ENTIRELY DIFFERENT meanings due to the VFD-centric design.
+
+CRITICAL NOTICE TO SERVICE PERSONNEL:
+The CP-300 error code table is INCOMPATIBLE with the CP-200 error code table.
+Several code numbers (including E08, E17, E20) have completely different definitions
+between the two product families. ALWAYS confirm the model series before referencing
+error code documentation. Cross-referencing CP-200 documentation for CP-300
+troubleshooting (or vice versa) WILL lead to incorrect diagnosis and may cause
+equipment damage or personnel injury.
+
+Applications: Variable-demand industrial air supply, process gas compression,
+instrument air systems, and CNG compression. Variable-speed operation allows
+the CP-300 to modulate between 30–100% capacity, resulting in 30–45% energy
+savings versus fixed-speed units at part-load.
+
+1.2  Key Technology Differences from CP-200 Series
+
+  Feature                  CP-200 Series              CP-300 Series
+  -----------------------  -------------------------  --------------------------
+  Compression type         Reciprocating piston       Twin-screw rotary
+  Speed control            Fixed speed (DOL start)    Variable (VFD, 30–60 Hz)
+  Cooling                  Air-cooled, belt-fan        Air or water; direct-drive
+  Lubrication              Splash/pressure gear pump  Injection-flooded oil system
+  Control platform         IW-CTRL-3000               IW-CTRL-5000
+  HMI                      4.3-in color screen        7-in color touchscreen
+  E17 definition           HIGH DISCHARGE TEMP        MOTOR FREQUENCY FAULT (VFD)
+  E08 definition           LOW SUCTION PRESSURE       VIBRATION FAULT
+  Oil change interval      Every 500 hours            Every 750 hours
+  Max ambient temp         115°F                      122°F
+
+1.3  CP-300 Major Component Assemblies
+
+  1.3.1  Screw Compression Element
+         - Female/male rotor profile: 4+6 lobe asymmetric (GHH-Rand licensed profile)
+         - Rotor material: ductile iron with titanium nitride coating
+         - Rotor clearances: 0.002–0.004 in radial; maintained by precision bearings
+         - Oil injection rate: 8–12 GPM at full load for cooling and sealing
+         - Male rotor speed: 1,800–3,600 RPM (VFD controlled)
+
+  1.3.2  Variable Frequency Drive (VFD) Assembly
+         - VFD rating: 460V/3Ø/60Hz input; 0–480V/0–120Hz output
+         - VFD technology: IGBT-based PWM, integrated DC bus choke
+         - VFD cooling: dedicated internal fan; air-purged enclosure
+         - Output frequency range: 15–75 Hz (30–150% of base 50 Hz)
+         - Motor speed range: 900–4,500 RPM
+         - The VFD continuously monitors output frequency and compares to commanded
+           setpoint. Deviation exceeding ±2 Hz for more than 3 seconds triggers E17.
+
+  1.3.3  Oil System
+         - Oil sump capacity: 8.0 quarts (CP-300/301); 12.0 quarts (CP-302)
+         - Oil type: IW-ScrewLube 32 (polyalphaolefin synthetic, ISO VG 32)
+         - Oil injection temperature: 140–160°F optimal
+         - Oil separator: coalescing type; oil carryover <3 ppm at rated conditions
+         - Oil cooler: plate-and-frame heat exchanger (CP-301/302 water-cooled)
+         - Thermostatic bypass valve maintains oil injection temperature
+
+  1.3.4  Cooling System
+         - CP-300: Air-cooled; direct-drive axial fan, no belt system
+         - CP-301/302: Water-cooled; plate-and-frame oil cooler and aftercooler
+         - Cooling water requirements: 25–40 GPM, inlet temp <85°F, 30–100 PSIG
+         - The CP-300 has NO belt-driven cooling fan — this is a common confusion
+           with CP-200 service technicians unfamiliar with the CP-300 platform
+
+1.4  Nameplate and Identification
+
+CP-300 series nameplates are located on the front door panel. Serial numbers
+follow the format: CP3-YYYYMM-XXXX. Units with serial numbers below CP3-202305-0500
+(i.e., serial sequence < 30500) may require VFD firmware update — see Bulletin
+BULL-2023-008 for details regarding spurious E17 faults on earlier units.
+
+================================================================================
+SECTION 2 — SAFETY
+-------------------------------------------------------------------------------
+
+2.1  VFD-Specific Safety Warnings
+
+DANGER: The VFD maintains a DC bus voltage up to 750V for up to 10 MINUTES
+after power is removed. NEVER open the VFD enclosure until the DC bus indicator
+light is extinguished and at least 10 minutes have elapsed after power-off.
+Failure to observe this warning can result in electrocution and death.
+
+WARNING: The CP-300 VFD can output frequencies up to 75 Hz, causing the motor
+to operate at up to 150% of its nameplate speed. At elevated speeds, centrifugal
+forces on rotating components increase with the square of speed. Unauthorized
+VFD parameter changes above the rated maximum frequency are strictly prohibited
+and will void the warranty.
+
+  - LOTO must include both the main power disconnect AND the VFD control power
+    (separate 120V circuit for VFD logic board and cooling fans)
+  - Verify ZERO voltage at VFD input terminals before any VFD service
+  - Ensure proper VFD drive-end motor bearing insulation (shaft grounding ring
+    required — installed at factory; do not remove)
+
+2.2  General Safety
+
+All general safety warnings from Section 2 of the CP-200 series manual apply.
+In addition, note that the CP-300's high-speed screw element can store significant
+kinetic energy at full speed. Allow rotor deceleration to complete (HMI shows
+"STOPPED") before opening any compression-side covers.
+
+================================================================================
+SECTION 3 — INSTALLATION
+-------------------------------------------------------------------------------
+
+3.1  Site Requirements
+
+  - Minimum clearance: 48 inches on VFD service side; 36 inches on all other sides
+  - Floor load capacity: 4,500 lbs (CP-300), 6,000 lbs (CP-301), 8,500 lbs (CP-302)
+  - Ventilation: minimum 30 air changes per hour; VFD enclosure purge air must
+    be filtered (particle size <5 micron, humidity <85% non-condensing)
+  - Electrical: 460V/3Ø/60Hz with <5% total harmonic distortion at supply bus
+    (excessive THD degrades VFD reliability and may trigger spurious E17 faults)
+  - Ground: dedicated equipment ground, <1Ω to earth (VFD requires low-impedance ground)
+
+3.2  VFD Commissioning Parameters
+
+  Upon initial installation, verify these VFD parameters before first start:
+  (Access via IW-CTRL-5000 HMI → Settings → VFD Parameters)
+
+  Parameter                 Factory Default   Range
+  ------------------------  ----------------  ------------------
+  Base frequency (P1.01)    60 Hz             50–60 Hz
+  Maximum frequency (P1.02) 65 Hz             50–75 Hz
+  Minimum frequency (P1.03) 20 Hz             10–30 Hz
+  Accel time (P2.01)        15 seconds        5–60 seconds
+  Decel time (P2.02)        20 seconds        5–60 seconds
+  Current limit (P3.01)     110% FLA          100–130%
+  Frequency deviation alarm  ±2 Hz            ±1–5 Hz (E17 threshold)
+
+  WARNING: Do not modify VFD parameters without authorization from IndustrialWorks
+  engineering. Incorrect parameters can cause E17 motor frequency faults, motor
+  overheating, or mechanical damage to the screw element.
+
+================================================================================
+SECTION 4 — OPERATION
+-------------------------------------------------------------------------------
+
+4.1  Pre-Startup Checks — CP-300 Specific
+
+  [ ] Verify oil level on sight glass (FULL mark, cold reading)
+  [ ] Check oil condition — should be clear amber; milky or dark = change oil
+  [ ] Confirm VFD cooling fans are operational (audible on power-up)
+  [ ] Verify VFD DC bus indicator light is OFF from previous operation
+  [ ] Confirm inlet filter restriction indicator is in GREEN zone
+  [ ] Verify all VFD input and output cable connections are tight (annual torque check)
+  [ ] Confirm that VFD firmware version is 3.2.1 or later (check HMI → About →
+      VFD Firmware; units with older firmware are subject to spurious E17 faults
+      per Bulletin BULL-2023-008)
+
+4.2  Normal Start Sequence
+
+  1. Power ON at main disconnect; wait 30 seconds for VFD boot sequence
+  2. HMI displays "VFD READY — SYSTEM OK"
+  3. Press START; VFD ramps to minimum frequency (20 Hz) in soft-start mode
+  4. Over 15 seconds, VFD accelerates to 45 Hz (75% speed, no-load)
+  5. Capacity controller engages; VFD modulates frequency to match demand
+  6. At steady state, VFD output frequency varies between 30–65 Hz
+
+4.3  Normal Operating Parameters — CP-300
+
+  Parameter                   Normal Range        Warning           Fault (E-code)
+  --------------------------  ------------------  ----------------  ----------------
+  Discharge Pressure (PSIG)   100–150             >145              >155 (E07)
+  Discharge Temperature (°F)  160–195             >200              >220 (E11*)
+  VFD Output Frequency (Hz)   30–65               ±2 Hz deviation   ±2 Hz >3s (E17)
+  Oil Injection Temp (°F)     140–160             >170              >185 (E11*)
+  Motor Amps                  ≤FLA rating         >90% FLA          >110% FLA (E03)
+  Vibration (mm/s RMS)        <2.5                >4.0              >7.1 (E08)
+
+  * E11 on CP-300 is oil temperature; E17 is VFD frequency. Discharge temperature
+    on CP-300 does NOT trigger E17 (unlike CP-200 where E17 = HIGH DISCHARGE TEMP).
+
+================================================================================
+SECTION 5 — MAINTENANCE
+-------------------------------------------------------------------------------
+
+5.1  Preventive Maintenance Schedule — CP-300
+
+IMPORTANT: The CP-300 maintenance schedule differs significantly from CP-200.
+The extended oil change interval (750 hours vs. 500 hours) is due to the
+synthetic lubricant used in CP-300 units. Do NOT substitute mineral oil.
+
+  Interval          Task
+  ----------------  ---------------------------------------------------------------
+  Every 8 hours     Check oil level; check for unusual noise; verify HMI shows no warnings
+  Every 125 hours   Inspect inlet filter restriction indicator; replace if at RED
+  Every 250 hours   VFD cooling fan filter replacement; inspect VFD cable torque
+  Every 500 hours   Inlet air filter replacement; oil separator differential check
+  Every 750 hours   FULL OIL CHANGE — IW-ScrewLube 32 synthetic only
+  Every 1,500 hrs   Oil separator element replacement; oil filter replacement
+  Every 3,000 hrs   Screw element inspection; bearing clearance measurement; belt N/A
+  Every 6,000 hrs   Major overhaul: rotor set, bearings, seals
+
+5.2  Oil Change Procedure — CP-300 (Every 750 Hours)
+
+  Oil type: IW-ScrewLube 32 ONLY — do NOT use mineral-based compressor oil
+  Capacity: 8.0 quarts (CP-300/301) | 12.0 quarts (CP-302)
+
+  NOTE: The CP-300 oil system is under positive pressure during operation.
+  NEVER attempt to drain oil while the unit is running or pressurized.
+
+  1. Run unit for 5 minutes to warm oil to 150°F
+  2. LOTO the unit; verify system pressure is ZERO (check HMI pressure display)
+  3. Open oil drain valve (ball valve, bottom of oil sump)
+  4. Allow to drain completely — allow 20 minutes for synthetic oil (more viscous
+     when cold; warm drainage is much faster)
+  5. Remove and replace oil filter (IW-OILF-CP3-01)
+  6. Close drain valve; fill sump via fill port to FULL mark
+  7. Run 3 minutes; recheck level; top off if necessary
+  8. Verify oil injection temperature reaches 140°F within 5 minutes of operation
+
+5.3  VFD Preventive Maintenance
+
+  CAUTION: VFD maintenance requires qualified electricians or VFD technicians.
+
+  Every 250 hours:
+  - Replace VFD enclosure air filter (IW-VFDF-CP3-01)
+  - Clean filter housing with dry brush; do NOT use compressed air inside VFD enclosure
+  - Inspect filter: if filter is more than 50% loaded, reduce replacement interval
+
+  Every 1,000 hours:
+  - Torque-check all VFD input and output cable lugs (torque per VFD manual IW-VFD-5K)
+  - Inspect DC bus capacitors for bulging, leakage, or discoloration
+  - Verify VFD firmware version (should be 3.2.1 or later; update if needed)
+  - Test VFD output frequency with calibrated power meter; compare to HMI reading
+
+  Every 5 years or 20,000 hours:
+  - Replace VFD DC bus capacitors (factory service only)
+  - Replace VFD cooling fans
+
+================================================================================
+SECTION 6 — TROUBLESHOOTING
+-------------------------------------------------------------------------------
+
+6.1  Troubleshooting Methodology — CP-300
+
+Due to the VFD-centric design, CP-300 troubleshooting often involves VFD
+parameter and electrical diagnostics in addition to mechanical checks. Always
+start with HMI fault log (HMI → Faults → History) to see fault code, timestamp,
+operating conditions at fault time, and VFD output frequency at fault time.
+
+6.2  Motor Frequency Fault — Diagnostic Tree (E17)
+
+IMPORTANT: On the CP-300 series, E17 is a MOTOR FREQUENCY FAULT — it indicates
+that the VFD output frequency deviated from the commanded setpoint by more than
+±2 Hz for more than 3 continuous seconds.
+
+E17 on CP-300 IS NOT A TEMPERATURE FAULT.
+E17 on CP-300 IS NOT RELATED TO DISCHARGE TEMPERATURE.
+E17 on CP-300 IS NOT RELATED TO THE CONDENSER COILS OR COOLING FAN.
+
+(If a technician familiar with CP-200 units sees E17 and checks the condenser
+coils, they will find no issue — because E17 on CP-300 is a VFD frequency fault,
+not a thermal fault. This is a known cross-training error — see company Tech
+Bulletin TN-2023-42 regarding model cross-training requirements.)
+
+Trigger Condition: VFD output frequency deviates >±2 Hz from setpoint for >3 seconds.
+
+Probable Causes (in order of frequency):
+  A. VFD firmware bug (units with serial < CP3-202305-0500; see Bulletin BULL-2023-008)
+  B. 3-phase input voltage instability (voltage sag, swell, or phase loss)
+  C. Incorrect VFD parameter P1.02 (maximum frequency) set too low
+  D. VFD input frequency deviation (supply not stable at 60 Hz)
+  E. Mechanical overload causing VFD to lose speed regulation
+  F. Motor winding fault causing excessive slip
+  G. VFD output cable insulation failure (partial discharge)
+  H. Faulty VFD frequency sensor/feedback circuit
+
+Diagnostic Steps for E17 on CP-300:
+  Step 1: Check VFD firmware version (HMI → About → VFD Firmware)
+          If version < 3.2.1 AND serial number < 30500, update firmware immediately
+          per Bulletin BULL-2023-008. This is the most common cause of E17 on
+          early CP-300 units.
+
+  Step 2: Check VFD parameter P1.01 (base frequency): must match supply frequency
+          (60 Hz in North America). Incorrect setting causes persistent E17 faults.
+          Access: HMI → Settings → VFD Parameters → P1.01
+
+  Step 3: Verify 3-phase input voltage quality
+          - Measure L1, L2, L3 at VFD input terminals with true-RMS meter
+          - All three phases must be 460V ±5% (437–483V)
+          - Phase-to-phase imbalance must be <2%
+          - Verify supply frequency is 60 Hz ±0.5 Hz
+
+  Step 4: Verify VFD output frequency
+          - Connect calibrated power meter to VFD output (between VFD and motor)
+          - Compare actual output frequency to HMI-displayed setpoint
+          - If output frequency matches setpoint but E17 still fires, suspect
+            internal VFD feedback circuit fault — replace VFD
+
+  Step 5: Inspect motor
+          - Measure motor winding resistance (all three phases within 5% of each other)
+          - Measure insulation resistance (>100 MΩ phase-to-ground with megohmmeter)
+          - Inspect motor shaft for mechanical overload (seized bearing, coupling fault)
+
+  Step 6: If all above checks pass, contact IndustrialWorks technical support
+          with the VFD event log (export via HMI → Faults → Export to USB)
+
+Restart Procedure after E17 on CP-300:
+  1. Confirm root cause has been identified and corrected
+  2. Reset VFD: HMI → Faults → Reset VFD (or press physical RESET button on VFD door)
+  3. Verify VFD DC bus light goes OFF, then back ON as VFD re-initializes
+  4. HMI returns to "VFD READY" state
+  5. Press START; monitor VFD output frequency on HMI during soft-start
+  6. Verify frequency ramps smoothly from 20 Hz to operating frequency
+  7. If E17 immediately re-triggers during startup, do NOT retry more than 3 times
+     — contact technical support
+
+6.3  Vibration Fault — Diagnostic Tree (E08)
+
+IMPORTANT: On CP-300 series, E08 = VIBRATION FAULT.
+(Note: On CP-200 series, E08 = LOW SUCTION PRESSURE — completely different meaning.)
+
+Trigger Condition: Vibration sensor reading exceeds 7.1 mm/s RMS.
+
+Probable Causes:
+  A. Worn or damaged screw element bearings
+  B. Debris ingestion into screw element (inspect inlet filter)
+  C. Oil injection system malfunction (inadequate lubrication causes metal contact)
+  D. Coupling failure between motor and screw element
+  E. Imbalanced rotor (requires factory inspection)
+  F. Foundation resonance or loose mounting bolts
+
+Diagnostic Steps:
+  1. Check HMI for vibration trend (HMI → Data → Vibration Log)
+  2. Inspect inlet air filter — look for evidence of debris bypass
+  3. Verify oil injection rate (should be 8–12 GPM at operating temp)
+  4. Measure vibration at motor end bearing and compressor end bearing separately
+  5. Tighten all mounting bolts to specified torque (55 ft-lb for M12 isolator bolts)
+  6. If vibration is >4 mm/s at bearings, remove from service for bearing inspection
+
+================================================================================
+SECTION 7 — ERROR CODES
+-------------------------------------------------------------------------------
+
+7.1  Error Code Architecture — CP-300
+
+CRITICAL: The CP-300 error code table uses the same E01–E25 numbering as the
+CP-200 series, but many codes have DIFFERENT definitions. Do not use CP-200
+error documentation (CP200-SVC-001 or CP200-ERR-001) for CP-300 diagnostics.
+
+7.2  Complete Error Code Table — CP-300 Series
+
+Code  Name                         Category     Description
+----  ---------------------------  -----------  ----------------------------------------
+E01   STARTUP_FAIL                 Control      VFD did not reach minimum frequency in 20s
+E02   LOW_VOLTAGE                  Electrical   Supply voltage below 414V
+E03   MOTOR_OVERLOAD               Electrical   Motor current exceeded 110% FLA >10s
+E04   PHASE_LOSS                   Electrical   One or more input phases absent
+E05   PHASE_IMBALANCE              Electrical   Phase-to-phase voltage imbalance >2%
+E06   GROUND_FAULT                 Electrical   Ground leakage current >20mA
+E07   HIGH_DISCHARGE_PRESSURE      Pressure     Discharge pressure >155 PSIG
+E08   VIBRATION_FAULT              Mechanical   Vibration sensor >7.1 mm/s RMS
+E09   DISCHARGE_PRESSURE_SENSOR    Pressure     Discharge transducer signal out of range
+E10   OIL_SEPARATOR_DP             Oil System   Oil separator differential pressure >18 PSI
+E11   HIGH_OIL_TEMPERATURE         Thermal      Oil injection temperature >185°F
+E12   LOW_OIL_PRESSURE             Lubrication  Oil pressure <20 PSI for >3 seconds
+E13   OIL_PRESSURE_SENSOR          Lubrication  Oil pressure sensor out of range
+E14   OIL_LEVEL_LOW                Lubrication  Float switch indicates low oil level
+E15   INLET_VALVE_FAULT            Mechanical   Inlet valve actuator did not respond in 5s
+E16   CAPACITY_VALVE_FAULT         Mechanical   Capacity control valve stuck
+E17   MOTOR_FREQUENCY_FAULT        VFD          VFD output frequency deviation >±2 Hz, >3s
+E18   VFD_OVERTEMPERATURE          VFD          VFD heatsink temperature >85°C
+E19   VFD_OVERCURRENT              VFD          VFD output current >130% rated
+E20   BEARING_TEMPERATURE          Thermal      Bearing RTD reading >220°F (optional)
+E21   AFTERCOOLER_HIGH_TEMP        Thermal      Aftercooler outlet temp >130°F
+E22   COOLING_WATER_FLOW           Cooling      Cooling water flow <20 GPM (CP-301/302)
+E23   COOLING_WATER_TEMP           Cooling      Cooling water inlet >90°F (CP-301/302)
+E24   COMMS_FAULT                  Control      Modbus/Profibus communication timeout
+E25   CONTROL_BOARD_FAULT          Control      IW-CTRL-5000 internal self-test failure
+
+7.3  Detailed Fault Description: E17 — MOTOR FREQUENCY FAULT
+
+Fault Code:        E17
+Fault Name:        MOTOR_FREQUENCY_FAULT
+Model Applicability: CP-300, CP-301, CP-302 (ALL CP-300 SERIES)
+Fault Category:    VFD (Variable Frequency Drive)
+
+=====================================================================
+!! CRITICAL DISTINCTION FROM CP-200 SERIES !!
+On the CP-200 series, E17 = HIGH DISCHARGE TEMPERATURE (thermal fault).
+On the CP-300 series, E17 = MOTOR FREQUENCY FAULT (VFD fault).
+These are COMPLETELY DIFFERENT fault conditions requiring different responses.
+Checking condenser coils or coolant level will NOT resolve E17 on a CP-300.
+=====================================================================
+
+Trigger Condition:
+  The VFD continuously monitors its own output frequency and compares it to the
+  commanded frequency setpoint from the IW-CTRL-5000 capacity controller. If
+  the actual output frequency deviates from the setpoint by more than ±2 Hz for
+  more than 3 continuous seconds, the controller latches E17 and commands an
+  immediate controlled stop of the VFD (coast-to-stop mode).
+
+Common Scenario:
+  During load transitions (e.g., when system demand drops sharply and VFD
+  attempts to ramp down frequency rapidly), early-firmware units may fail to
+  track the setpoint within the ±2 Hz tolerance. This is the basis of the
+  firmware bug described in Bulletin BULL-2023-008.
+
+Immediate Action Required:
+  1. Note the VFD output frequency at fault time (recorded in HMI fault log)
+  2. Note the commanded setpoint frequency at fault time
+  3. Calculate the deviation — if it matches a load-transition scenario, suspect
+     firmware bug (check serial number and firmware version first)
+  4. Do NOT check condenser coils — this is not a temperature fault
+  5. Do NOT check cooling water levels — this is not a cooling fault
+  6. Check VFD parameter settings, verify 3-phase input power quality
+  7. Inspect motor windings if electrical cause is suspected
+
+Actions:
+  A. Check VFD firmware: HMI → About → VFD Firmware
+     - Version 3.2.1 or later: firmware is not the issue; proceed to Step B
+     - Version < 3.2.1 AND serial < 30500: perform firmware update (Bulletin BULL-2023-008)
+
+  B. Verify VFD parameter P1.01 = 60 (base frequency matches supply)
+     Access: HMI → Settings → VFD Parameters → P1.01
+
+  C. Verify 3-phase input voltage stability
+     - Connect power quality analyzer to VFD input for minimum 1 hour
+     - Acceptable: 460V ±5%, <2% imbalance, 60 Hz ±0.5 Hz
+     - If voltage is unstable, address supply-side power quality first
+
+  D. Inspect motor winding insulation (megohmmeter test >100 MΩ)
+  E. Check for mechanical overload: verify screw element turns freely
+
+Restart Procedure after E17 on CP-300:
+  1. Verify root cause corrected (firmware updated, parameters set, power verified)
+  2. Perform VFD reset: HMI → Faults → Reset VFD (latch must clear)
+  3. Confirm "VFD READY" status on HMI
+  4. Initiate soft-start by pressing START
+  5. Watch VFD output frequency on HMI trend screen during ramp-up
+  6. Frequency should ramp from 20 Hz → 45 Hz over 15 seconds without deviation
+  7. Monitor for E17 recurrence during first load-transition cycle
+  8. Log all findings in maintenance record
+
+7.4  Detailed Fault Description: E08 — VIBRATION FAULT
+
+Fault Code:        E08
+Fault Name:        VIBRATION_FAULT
+Trigger Condition: Vibration sensor reading >7.1 mm/s RMS for >5 seconds.
+
+IMPORTANT: On CP-200 series, E08 = LOW SUCTION PRESSURE.
+On CP-300 series, E08 = VIBRATION FAULT. Do not cross-reference.
+
+Root Causes:
+  - Worn screw element bearings (most common after 10,000 hours)
+  - Debris ingestion past inlet filter
+  - Low oil injection causing metal-to-rotor contact and vibration
+  - Motor shaft coupling damage or misalignment
+  - Imbalanced screw rotors (rotor replacement needed)
+  - Loose mounting bolts or degraded vibration isolators
+Immediate Action:
+  1. Stop unit immediately — continued operation with high vibration will
+     rapidly destroy screw element bearings (catastrophic failure within hours)
+  2. Inspect oil injection system — confirm oil flow to element
+  3. Inspect inlet filter for breach or debris bypass
+  4. Measure vibration at both bearing housings
+  5. Contact IndustrialWorks service if bearing vibration >4 mm/s
+
+================================================================================
+SECTION 8 — PARTS AND ORDERING
+-------------------------------------------------------------------------------
+
+8.1  Recommended Spare Parts List — CP-300
+
+Part Number        Description                              Qty Recommended
+-----------------  ---------------------------------------  ----------------
+IW-FILT-CP3-A01    Inlet air filter element                 2 per unit
+IW-OILF-CP3-01     Oil filter element                       2 per unit
+IW-VFDF-CP3-01     VFD enclosure air filter                 4 per unit
+IW-OILSEP-CP3-01   Oil separator element                    1 per unit
+IW-COUP-CP3-01     Flexible jaw coupling insert             1 per unit
+IW-BRG-CP3-01      Drive end bearing set (per element)      1 per unit
+IW-SEALKIT-CP3-01  Shaft seal kit                           1 per unit
+IW-OIL-SL32-1G     IW-ScrewLube 32 synthetic, 1-gallon     3 per unit
+IW-VFD-5000        VFD replacement unit (CP-300/301)        1 (emergency)
+
+8.2  Warranty Information
+
+  Standard warranty: 24 months from commissioning or 30 months from shipment.
+  Extended warranty available. Warranty conditions same as CP-200 series with
+  the additional condition that only IW-ScrewLube 32 synthetic oil may be used
+  in the CP-300 lubrication system. Use of mineral oil voids warranty.
+
+================================================================================
+END OF DOCUMENT
+Document ID: CP300-SVC-001  |  Revision: 2  |  Date: 2024-03-01
+IndustrialWorks Corporation — Confidential Technical Documentation
+================================================================================

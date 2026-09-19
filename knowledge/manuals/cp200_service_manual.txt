@@ -1,0 +1,536 @@
+---
+document_id: CP200-SVC-001
+document_type: service_manual
+equipment_type: compressor
+model: CP-200
+tenant_id: demo
+site_id: SITE-A
+revision: 4
+effective_date: 2024-01-15
+---
+
+================================================================================
+INDUSTRIALWORKS CORPORATION
+COMPRESSOR CP-200 SERIES SERVICE MANUAL
+Part Number: IW-SM-CP200-R4
+Revision: 4  |  Effective Date: January 15, 2024
+================================================================================
+
+SECTION 1 — EQUIPMENT OVERVIEW
+-------------------------------------------------------------------------------
+
+1.1  Product Family Description
+
+The CP-200 Series industrial reciprocating compressors are heavy-duty, single-stage
+or two-stage air and gas compression units designed for continuous-duty industrial
+applications. This manual covers the following models:
+
+  CP-200   — Single-stage, 50 HP, 175 PSIG max, air-cooled
+  CP-201   — Single-stage, 75 HP, 175 PSIG max, air-cooled with aftercooler
+  CP-202   — Two-stage, 100 HP, 200 PSIG max, air-cooled with intercooler/aftercooler
+
+All CP-200 series units share the same control platform (IW-CTRL-3000), identical
+operator interface (4.3-inch color HMI), and the same error code architecture.
+Refer to Section 7 for the complete error code reference.
+
+The CP-200 family is engineered for environments requiring reliable, oil-flooded
+reciprocating compression in manufacturing plants, refineries, food processing
+facilities, and general industrial applications. Ambient operating temperature
+range: 32°F to 115°F (0°C to 46°C). Altitude de-rating applies above 3,300 ft.
+
+1.2  Major Component Assemblies
+
+  1.2.1  Compression Assembly
+         - Cast-iron cylinder block (bore: 5.5 in CP-200, 6.0 in CP-202)
+         - Forged-steel connecting rods with replaceable bronze bushings
+         - Hardened-steel crankshaft, dynamically balanced, journal-ground
+         - PTFE-coated piston rings (service interval: 8,000 hours)
+         - Stainless-steel reed valves (suction and discharge)
+
+  1.2.2  Lubrication System
+         - Pressure-feed splash lubrication with positive-displacement gear pump
+         - Oil capacity: 3.5 quarts (CP-200/201), 5.0 quarts (CP-202)
+         - Oil type: IW-CompOil 100 or SAE 30 non-detergent compressor oil
+         - Oil pressure normal operating range: 18–35 PSI
+         - Oil temperature normal range: 130–175°F
+
+  1.2.3  Cooling System
+         - Forced-air cooling via belt-driven fan (CP-200/201) or direct-drive fan (CP-202)
+         - Aluminum fin-and-tube condenser coils (discharge air side)
+         - Fin spacing: 12 fins-per-inch (susceptible to dust loading — see Section 5)
+         - Cooling fan motor: 1.5 HP, 1,750 RPM (CP-200), 2.0 HP (CP-202)
+
+  1.2.4  Control and Safety System
+         - IW-CTRL-3000 microprocessor controller
+         - Discharge temperature thermocouple (Type K, range: 0–400°F)
+         - Discharge pressure transducer (0–250 PSIG)
+         - Suction pressure transducer (0–50 PSIG)
+         - Oil pressure switch (cutout at 15 PSI)
+         - Motor thermal overload relay
+
+1.3  Nameplate and Identification
+
+Each unit carries a stainless-steel nameplate on the right side of the skid frame.
+The nameplate includes: model number, serial number, rated HP, max working pressure,
+electrical specifications, and manufacturing date. Serial numbers follow the format:
+CP2-YYYYMM-XXXX (e.g., CP2-202203-0417 = March 2022, unit #417).
+
+================================================================================
+SECTION 2 — SAFETY
+-------------------------------------------------------------------------------
+
+2.1  General Safety Warnings
+
+WARNING: Compressed air and gas systems contain stored energy that can cause
+serious injury or death. All service personnel must be trained and authorized
+before performing maintenance.
+
+  - ALWAYS lock out / tag out (LOTO) the unit before performing any internal
+    service. Refer to site LOTO procedure and OSHA 29 CFR 1910.147.
+  - NEVER remove pressure-retaining components while the system is pressurized.
+  - ALWAYS verify system pressure is ZERO before disconnecting piping.
+  - DO NOT operate the compressor above its rated maximum discharge pressure.
+  - ALWAYS allow the unit to cool for a minimum of 30 minutes after shutdown
+    before touching discharge piping, cylinder heads, or valve covers.
+  - High-voltage electrical hazards are present. Qualified electricians only
+    for electrical service.
+
+2.2  Personal Protective Equipment (PPE) Requirements
+
+  - Safety glasses or face shield (minimum ANSI Z87.1)
+  - Hearing protection (>85 dB — required within 3 feet of operating unit)
+  - Safety-toed boots
+  - Heat-resistant gloves for cylinder and discharge line service
+  - Chemical-resistant gloves for refrigerant or oil handling
+
+2.3  Emergency Shutdown Procedure
+
+  In any emergency, press the RED "EMERGENCY STOP" button on the operator panel.
+  This immediately de-energizes the motor starter and closes the inlet valve.
+  Do not restart the unit without identifying and correcting the cause of the
+  emergency shutdown. Log all emergency stops in the maintenance record.
+
+================================================================================
+SECTION 3 — INSTALLATION
+-------------------------------------------------------------------------------
+
+3.1  Site Requirements
+
+  - Minimum clearance: 36 inches on service side, 24 inches on all other sides
+  - Floor load capacity: 2,500 lbs minimum (CP-200/201), 3,500 lbs (CP-202)
+  - Mounting: grout-leveled concrete pad or vibration-isolated steel platform
+  - Ventilation: minimum 20 air changes per hour; inlet air must be free of
+    corrosive vapors, paint fumes, and combustible gases
+  - Ambient temperature: 32–115°F; relative humidity: 10–90% non-condensing
+
+3.2  Piping Connections
+
+  - Discharge connection: 2-inch NPT male (CP-200/201), 2.5-inch NPT (CP-202)
+  - Inlet connection: 3-inch NPT female with inlet filter/silencer
+  - All piping must be independently supported — no piping loads on compressor
+    connections exceeding 50 ft-lb bending moment or 200 lb force
+
+3.3  Electrical Requirements
+
+  - CP-200: 460V/3Ø/60Hz, 50 HP, 65A FLA, 90A MCA
+  - CP-201: 460V/3Ø/60Hz, 75 HP, 96A FLA, 125A MCA
+  - CP-202: 460V/3Ø/60Hz, 100 HP, 124A FLA, 160A MCA
+  - Motor rotation: verify correct rotation before initial startup (see Section 4.1)
+
+================================================================================
+SECTION 4 — OPERATION
+-------------------------------------------------------------------------------
+
+4.1  Pre-Startup Checks
+
+Before initial startup or after extended shutdown, complete this checklist:
+
+  [ ] Verify oil level is at FULL mark on sight glass (engine cold)
+  [ ] Check that inlet filter is clean and properly seated
+  [ ] Confirm all access panels and covers are secure
+  [ ] Verify drive belt tension (deflection: 3/8 to 1/2 inch at midspan)
+  [ ] Confirm system isolation valves are open
+  [ ] Verify discharge pressure setting is correct for application
+  [ ] Check motor rotation — looking at fan end, rotation must be CLOCKWISE
+      (incorrect rotation will result in immediate E03 motor overload fault)
+  [ ] Confirm all electrical connections are tight and grounded
+
+4.2  Normal Start Sequence
+
+  1. Power ON at main disconnect
+  2. HMI will display: "READY — Press START to begin"
+  3. Press green START button
+  4. Unit starts in unloaded condition (inlet valve closes to 20% open)
+  5. After 30-second warm-up, inlet valve opens to 100%
+  6. Monitor discharge pressure rise to setpoint
+  7. Verify discharge temperature remains below 175°F during first 30 minutes
+
+4.3  Normal Operating Parameters
+
+  Parameter                   Normal Range        Warning Threshold   Fault Threshold
+  --------------------------  ------------------  ------------------  ---------------
+  Discharge Pressure (PSIG)   100–175             >170                >185
+  Discharge Temperature (°F)  140–175             >175                >185
+  Suction Pressure (PSIG)     0.5–8               <1.0                <0.3
+  Oil Pressure (PSI)          18–35               <20                 <15
+  Motor Amps                  ≤FLA rating         >90% FLA            >110% FLA
+  Vibration (in/sec)          <0.15               >0.25               >0.40
+
+4.4  Normal Shutdown Sequence
+
+  1. Press STOP on HMI
+  2. Unit enters unloaded coast-down mode (30 seconds)
+  3. Motor de-energizes; inlet valve closes
+  4. Discharge check valve prevents backflow
+  5. Allow unit to cool 15 minutes before touching hot surfaces
+
+================================================================================
+SECTION 5 — MAINTENANCE
+-------------------------------------------------------------------------------
+
+5.1  Preventive Maintenance Schedule
+
+CAUTION: Failure to follow the preventive maintenance schedule will void the
+equipment warranty and may result in equipment failure, property damage, or
+personnel injury.
+
+  Interval          Task
+  ----------------  ---------------------------------------------------------------
+  Every 8 hours     Check oil level on sight glass; check for unusual noise/vibration
+  Every 100 hours   Belt inspection: check tension, condition, and alignment (5.2)
+  Every 250 hours   Air filter replacement (5.3); inspect valve reed condition
+  Every 500 hours   Engine oil change (5.4); oil filter replacement
+  Every 1,000 hrs   Full valve inspection and regapping; belt replacement
+  Every 2,000 hrs   Major overhaul: piston rings, rod bearings, crank bearings
+  Every 6 months    Condenser coil cleaning (5.5) — UPDATED per Bulletin 2024-001
+  Annually          Thermocouple calibration; pressure transducer verification
+
+NOTE: Bulletin BULL-2024-001 (effective 2024-01-15) updated condenser cleaning
+frequency from annually to every 6 months for units operating in dusty or
+industrial environments. This is a critical update to prevent E17 High Discharge
+Temperature faults caused by condenser fouling.
+
+5.2  Belt Inspection and Replacement (Every 100 Hours)
+
+  Required Tools: Tension gauge (IW-TG-100), straight edge, torque wrench
+
+  1. LOTO the unit (see Section 2)
+  2. Remove belt guard (4 × 3/8-in hex bolts)
+  3. Check belt tension: press firmly at mid-span; deflection should be 3/8–1/2 in
+     under 10 lb force. If belt deflects more than 1/2 in, tighten via motor
+     adjustment slots. If less than 3/8 in, loosen.
+  4. Inspect belt for: cracking, glazing, fraying, or embedded debris
+  5. Check pulley alignment with straight edge across both pulley faces (max
+     misalignment: 1/16 in over 12 in span)
+  6. Replace belt if cracks, glazing, or worn edges are observed
+  7. Replacement belt: IW-BELT-CP2-A58 (CP-200/201), IW-BELT-CP2-B68 (CP-202)
+  8. After replacement, re-tension and re-check after 8 hours of operation
+
+5.3  Air Inlet Filter Replacement (Every 250 Hours)
+
+  Filter element: IW-FILT-CP2-A01
+  1. LOTO the unit
+  2. Unscrew filter housing cap (hand-tight only)
+  3. Remove and discard old element
+  4. Wipe housing interior with clean dry cloth
+  5. Install new element; ensure gasket seats evenly
+  6. Reinstall cap — hand-tight plus 1/4 turn only (over-tightening crushes gasket)
+  7. Record replacement in maintenance log with date and unit hours
+
+5.4  Oil Change Procedure (Every 500 Hours)
+
+  Oil type: IW-CompOil 100 (preferred) or SAE 30 non-detergent compressor oil
+  Capacity: 3.5 quarts (CP-200/201) | 5.0 quarts (CP-202)
+
+  1. Run unit for 5 minutes to warm oil to operating temperature
+  2. LOTO the unit
+  3. Place drain pan beneath oil drain plug (3/4-in NPT, bottom of crankcase)
+  4. Remove drain plug; allow oil to drain completely (~10 minutes)
+  5. Remove oil filter (IW-OILF-CP2-01); discard old filter
+  6. Install new oil filter; pre-fill with clean oil before installing
+  7. Reinstall drain plug with new crush washer; torque to 35 ft-lb
+  8. Fill crankcase to FULL mark on sight glass
+  9. Run unit for 2 minutes; check for leaks; recheck oil level
+  10. Record oil change in maintenance log with oil type, date, and unit hours
+
+5.5  Condenser Coil Cleaning (Every 6 Months — Per Bulletin BULL-2024-001)
+
+  IMPORTANT: Fouled condenser coils are the most common cause of E17 High
+  Discharge Temperature fault on CP-200 series units. Per Bulletin BULL-2024-001,
+  cleaning interval was reduced from annually to every 6 months for industrial
+  environments. If the unit operates in environments with airborne dust, fiber,
+  or debris, monthly visual inspection is recommended.
+
+  1. LOTO the unit
+  2. Use compressed air (max 100 PSI) to blow through fins in reverse-flow direction
+     (i.e., from discharge side to inlet side)
+  3. If more than 1/8-inch of debris buildup is visible, use IW-COIL-CLEAN spray;
+     allow 10-minute dwell time; rinse with low-pressure water; allow to dry
+  4. Inspect fins for bending or damage; straighten with fin comb if needed
+  5. Verify cooling fan blade condition — no cracks, bending, or debris
+  6. After coil cleaning, run unit and monitor discharge temperature to confirm
+     improvement (should drop 10–20°F if fouling was severe)
+  7. Document cleaning in maintenance log; photograph coil before and after
+
+================================================================================
+SECTION 6 — TROUBLESHOOTING
+-------------------------------------------------------------------------------
+
+6.1  Troubleshooting Methodology
+
+When a fault occurs, follow this diagnostic sequence:
+  1. Note the error code displayed on HMI
+  2. Record operating conditions at time of fault (pressure, temperature, amps)
+  3. Allow unit to cool if temperature-related fault
+  4. Do NOT clear fault and restart without identifying the root cause
+  5. Use Section 7 (Error Codes) for specific fault diagnosis
+  6. Correct the root cause before restarting
+  7. Monitor unit for 10–15 minutes after restart to confirm resolution
+
+6.2  High Discharge Temperature — Diagnostic Tree (E17)
+
+When E17 fires, the discharge temperature has exceeded 185°F. This is a
+thermal protection shutdown to prevent cylinder head damage, valve failure,
+or oil coking.
+
+CRITICAL NOTE: E17 on CP-200 series = HIGH DISCHARGE TEMPERATURE.
+This is a THERMAL fault — NOT an electrical or frequency fault.
+(Note: CP-300 series uses a completely different error code architecture;
+do not cross-reference CP-300 documentation for CP-200 E17 diagnosis.)
+
+Probable causes (in order of frequency):
+  A. Fouled condenser coils (most common — >60% of field cases)
+  B. Cooling fan failure (belt broken/slipped, fan motor failed)
+  C. Low refrigerant charge (if unit uses refrigerant cooling circuit)
+  D. Blocked discharge piping causing excessive re-compression
+  E. Ambient temperature above 115°F
+  F. Faulty discharge temperature thermocouple (check calibration)
+  G. Defective discharge temperature sensor wiring
+
+Diagnostic steps:
+  Step 1: Verify condenser coils are clean (see 5.5). If >1/8 in fouling, clean coils
+  Step 2: Check cooling fan — confirm belt intact, correct tension, correct rotation
+  Step 3: Verify cooling fan motor operation (measure voltage at motor terminals)
+  Step 4: Check coolant level if applicable (CP-202 with optional water aftercooler)
+  Step 5: Measure actual discharge temp with calibrated thermometer; compare to
+          HMI reading. If >5°F discrepancy, suspect sensor fault
+  Step 6: Verify ambient temperature is within specification (<115°F)
+  Step 7: Check discharge piping for blockage or closed valves
+
+6.3  Common Faults and Field-Expedient Checks
+
+  Fault             Quick Check                              Typical Fix
+  ----------------  ---------------------------------------  -----------------------
+  E03 Motor OVL     Measure motor amps (all 3 phases)        Check rotation, unload
+  E08 Low Suction   Check inlet filter; listen for hissing   Replace filter or repair leak
+  E12 Oil Pressure  Check oil level on sight glass           Add oil or replace pump
+  E17 High Temp     Check condenser coils and cooling fan    Clean coils; fix fan
+  E21 High Press    Check discharge piping for blockage      Open isolation valve
+
+================================================================================
+SECTION 7 — ERROR CODES
+-------------------------------------------------------------------------------
+
+7.1  Error Code Architecture
+
+The IW-CTRL-3000 controller uses a two-character alphanumeric fault code system.
+Error codes E01–E25 are active-fault codes that cause shutdown. Warning codes
+W01–W10 are advisory — the unit continues to run but logs the condition.
+
+IMPORTANT MODEL NOTE:
+Error codes on CP-200 series are specific to this product family. Error codes
+on CP-300 series use a different definition set for several shared code numbers.
+ALWAYS confirm the model before referencing error code documentation.
+For CP-200 series: refer only to document CP200-ERR-001 or this section.
+For CP-300 series: refer only to document CP300-ERR-001.
+
+7.2  Complete Error Code Table — CP-200 Series
+
+Code  Name                         Category     Description
+----  ---------------------------  -----------  ----------------------------------------
+E01   STARTUP_FAIL                 Control      Unit failed to reach run speed in 15 sec
+E02   LOW_VOLTAGE                  Electrical   Supply voltage below 414V (90% of 460V)
+E03   MOTOR_OVERLOAD               Electrical   Motor current exceeded thermal overload
+E04   PHASE_LOSS                   Electrical   One or more phases absent >0.5 seconds
+E05   PHASE_IMBALANCE              Electrical   Phase-to-phase voltage >5% imbalance
+E06   GROUND_FAULT                 Electrical   Ground current >50mA detected
+E07   HIGH_DISCHARGE_PRESSURE      Pressure     Discharge pressure >185 PSIG
+E08   LOW_SUCTION_PRESSURE         Pressure     Suction pressure <0.3 PSIG
+E09   DISCHARGE_PRESSURE_SENSOR    Pressure     Discharge transducer signal out of range
+E10   SUCTION_PRESSURE_SENSOR      Pressure     Suction transducer signal out of range
+E11   HIGH_OIL_TEMPERATURE         Thermal      Oil temperature >220°F
+E12   LOW_OIL_PRESSURE             Lubrication  Oil pressure <15 PSI for >3 seconds
+E13   OIL_PRESSURE_SENSOR          Lubrication  Oil pressure sensor signal out of range
+E14   OIL_LEVEL_LOW                Lubrication  Float switch indicates low oil level
+E15   INLET_VALVE_FAULT            Mechanical   Inlet valve actuator did not respond
+E16   CAPACITY_VALVE_FAULT         Mechanical   Capacity control valve did not respond
+E17   HIGH_DISCHARGE_TEMPERATURE   Thermal      Discharge temperature exceeded 185°F
+E18   DISCHARGE_TEMP_SENSOR        Thermal      Discharge thermocouple signal out of range
+E19   AMBIENT_TEMP_HIGH            Thermal      Ambient temperature sensor >120°F
+E20   VIBRATION_FAULT              Mechanical   Vibration switch activated (optional)
+E21   HIGH_DISCHARGE_PRESSURE_2    Pressure     Secondary high-pressure transducer >190 PSIG
+E22   INTERSTAGE_PRESSURE          Pressure     Interstage pressure out of range (CP-202)
+E23   AFTERCOOLER_HIGH_TEMP        Thermal      Aftercooler outlet temp >120°F (CP-201/202)
+E24   COMMS_FAULT                  Control      Modbus/BACnet communication timeout
+E25   CONTROL_BOARD_FAULT          Control      Internal controller self-test failure
+
+7.3  Detailed Fault Description: E17 — HIGH DISCHARGE TEMPERATURE
+
+Fault Code:        E17
+Fault Name:        HIGH_DISCHARGE_TEMPERATURE
+Model Applicability: CP-200, CP-201, CP-202 (ALL CP-200 SERIES)
+Fault Category:    Thermal Protection
+
+Trigger Condition:
+  The Type-K thermocouple mounted on the discharge flange measures a temperature
+  greater than 185°F (85°C). The controller applies a 2-second filter to prevent
+  nuisance trips from momentary spikes. If the temperature remains above 185°F
+  for more than 2 continuous seconds, E17 is latched and the unit shuts down.
+
+WARNING LEVEL:
+  A warning (W-HTEMP) is activated at 175°F. This allows operators 5–10 minutes
+  to investigate before a fault shutdown occurs. Heed all W-HTEMP warnings
+  immediately to prevent unplanned shutdowns.
+
+Root Causes:
+  PRIMARY — Fouled condenser coils (accounts for >60% of field E17 incidents)
+    The CP-200's air-cooled condenser coils accumulate dust, lint, and industrial
+    debris. Blocked fins restrict airflow, reducing heat rejection capacity.
+    In heavy industrial environments, coils may foul in as little as 60 days.
+
+  SECONDARY — Cooling fan system failure
+    A broken drive belt will disable the cooling fan, causing immediate thermal
+    runaway. Check belt condition first if coils are clean. Also check fan blade
+    condition — a cracked or bent blade reduces airflow by up to 40%.
+
+  TERTIARY — Insufficient coolant (CP-202 with water aftercooler option)
+    If the unit is equipped with a water-cooled aftercooler, low cooling water
+    flow will cause elevated discharge temperature. Minimum flow rate: 15 GPM.
+    Verify supply valve is fully open and cooling water temperature is <85°F.
+
+  OTHER — High ambient temperature, blocked discharge piping, refrigerant shortage,
+    defective thermocouple, wiring fault at TC connection (see Section 6.2)
+
+Immediate Action Required:
+  1. STOP COMPRESSOR — do not continue operation above 185°F discharge temperature
+  2. Allow unit to cool for minimum 15 minutes before inspection
+  3. Check condenser coils for fouling (Section 5.5)
+  4. Check cooling fan belt condition and tension
+  5. Verify cooling fan is rotating at correct speed and direction
+  6. If cooling water circuit present, verify flow rate (min 15 GPM)
+  7. Correct the identified root cause before restart
+
+Restart Procedure after E17:
+  1. Confirm all E17 root causes have been identified and corrected
+  2. Verify discharge temperature has cooled to <120°F on HMI display
+  3. Press RESET on HMI panel (or momentary button on door panel)
+  4. Fault clears; HMI returns to "READY" state
+  5. Press START; allow unit to run in unloaded condition for 5 minutes
+  6. Monitor discharge temperature — should stabilize below 165°F within 10 minutes
+  7. If discharge temperature climbs again toward 175°F, STOP unit and re-investigate
+  8. Document fault, root cause, corrective action, and restart in maintenance log
+
+Associated Warning:
+  W-HTEMP triggers at 175°F. If W-HTEMP appears, do not dismiss and continue
+  running — investigate immediately using the E17 diagnostic tree (Section 6.2).
+
+7.4  Detailed Fault Description: E08 — LOW SUCTION PRESSURE
+
+Fault Code:        E08
+Fault Name:        LOW_SUCTION_PRESSURE
+Trigger Condition: Suction pressure <0.3 PSIG for >5 seconds
+Root Causes:
+  - Severely clogged inlet air filter (most common)
+  - Refrigerant leak in suction piping (if process gas application)
+  - Closed or partially closed inlet isolation valve
+  - Inlet piping obstruction
+Immediate Action:
+  1. Stop compressor
+  2. Inspect inlet filter — replace if visually clogged (Section 5.3)
+  3. Check inlet isolation valve is fully open
+  4. Inspect suction piping for obstruction, crimping, or collapsed hose
+  5. Leak-test suction piping if filter is clean
+Restart: Clear fault; restart; verify suction pressure rises to normal range (0.5–8 PSI)
+
+7.5  Detailed Fault Description: E03 — MOTOR OVERLOAD
+
+Fault Code:        E03
+Fault Name:        MOTOR_OVERLOAD
+Trigger Condition: Motor current exceeds thermal overload relay setting for >10 sec
+Root Causes:
+  - Incorrect motor rotation direction (reversed phase connection)
+  - Mechanical binding in compression assembly
+  - Worn piston rings causing excessive friction
+  - Overloaded discharge pressure (back-pressure higher than rating)
+  - Low supply voltage causing high current draw
+  - Faulty motor windings
+Immediate Action:
+  1. LOTO unit
+  2. Measure motor winding resistance (all 3 phases should be within 5% of each other)
+  3. Verify phase-to-phase voltage at motor terminals (should be 460V ±5%)
+  4. Check motor rotation marking on motor fan cover (must be CW from fan end)
+  5. Attempt to rotate compressor shaft by hand (should turn freely without binding)
+  6. Check overload relay trip class and setting — verify against motor FLA nameplate
+Restart: Reset overload relay; address root cause; restart and monitor amps on HMI
+
+7.6  Detailed Fault Description: E12 — LOW OIL PRESSURE
+
+Fault Code:        E12
+Fault Name:        LOW_OIL_PRESSURE
+Trigger Condition: Oil pressure switch opens (below 15 PSI) for >3 continuous seconds
+Root Causes:
+  - Low oil level (check sight glass before all else)
+  - Worn or failed oil pump gear set
+  - Blocked oil filter
+  - Oil pressure switch failure
+  - Crankcase diluted with condensate (milky oil on dipstick — change oil immediately)
+Immediate Action:
+  1. STOP unit immediately; continued operation without oil pressure causes
+     catastrophic bearing failure within seconds
+  2. Check oil level on sight glass (cold reading; add oil if below FULL mark)
+  3. If oil level is correct, suspect pump or switch failure
+  4. Do NOT restart until oil pressure is confirmed above 18 PSI on startup
+Restart: After correcting cause, restart and immediately check oil pressure reading on HMI;
+  if pressure does not reach 18 PSI within 10 seconds, STOP unit; do not continue
+
+================================================================================
+SECTION 8 — PARTS AND ORDERING
+-------------------------------------------------------------------------------
+
+8.1  Recommended Spare Parts List
+
+Part Number        Description                           Qty Recommended
+-----------------  ------------------------------------  ----------------
+IW-FILT-CP2-A01    Air inlet filter element              2 per unit
+IW-OILF-CP2-01     Oil filter element                    2 per unit
+IW-BELT-CP2-A58    Drive belt (CP-200/201)               1 spare
+IW-BELT-CP2-B68    Drive belt (CP-202)                   1 spare
+IW-TC-CP2-01       Type K discharge thermocouple         1 per unit
+IW-VSET-CP2-01     Suction/discharge reed valve set      1 per unit
+IW-RING-CP2-01     Piston ring set (per cylinder)        1 per unit
+IW-SEAL-CP2-01     Shaft seal kit                        1 per unit
+IW-CRUSH-3/4       3/4-in NPT drain plug crush washer    10 per unit
+IW-OIL-1GAL        IW-CompOil 100, 1-gallon              2 per unit
+
+8.2  Ordering Information
+
+  Phone:  1-800-555-4000 (Mon–Fri, 7 AM–5 PM Central)
+  Email:  parts@industrialworks.com
+  Web:    https://parts.industrialworks.com
+  Emergency after-hours: 1-800-555-4001
+
+8.3  Warranty Information
+
+  Standard warranty: 12 months from commissioning date or 18 months from
+  shipment, whichever occurs first. Warranty covers defects in material and
+  workmanship under normal operating conditions. Warranty is VOID if:
+  - Preventive maintenance schedule (Section 5) is not followed
+  - Non-approved lubricants or parts are used
+  - Unit is operated outside rated parameters
+  - Unauthorized modifications are made
+
+================================================================================
+END OF DOCUMENT
+Document ID: CP200-SVC-001  |  Revision: 4  |  Date: 2024-01-15
+IndustrialWorks Corporation — Confidential Technical Documentation
+================================================================================

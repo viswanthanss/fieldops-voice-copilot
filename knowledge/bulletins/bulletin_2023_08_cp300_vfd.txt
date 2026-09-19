@@ -1,0 +1,64 @@
+---
+document_id: TSB-2023-08
+document_type: service_bulletin
+equipment_type: compressor
+model: CP-300
+tenant_id: demo
+site_id: SITE-B
+revision: 2
+effective_date: 2023-08-14
+section: electrical_vfd
+---
+
+================================================================================
+TECHNICAL SERVICE BULLETIN: TSB-2023-08
+Subject: CP-300 Variable Frequency Drive (VFD) Parameter Calibration for Error E17
+Applies To: All CP-300, CP-301, CP-302 Variable Speed Rotary Screw Units
+Date: August 14, 2023 | Revision: 2
+Author: IndustrialWorks Electrical & Drive Systems Engineering
+================================================================================
+
+1. CRITICAL MODEL ARCHITECTURE DISTINCTION
+--------------------------------------------------------------------------------
+NOTICE TO ALL TECHNICIANS:
+Error E17 on the CP-300 platform signifies MOTOR FREQUENCY FAULT (VFD slip/hunting).
+This is entirely distinct from older CP-200 reciprocating models where E17 designates
+discharge temperature. DO NOT perform thermal or condenser coil troubleshooting
+for an E17 alarm on a CP-300 unit.
+
+2. ROOT CAUSE & DESCRIPTION
+--------------------------------------------------------------------------------
+On CP-300 rotary screw compressors, the main drive motor is controlled by an
+integrated 460V variable frequency inverter (Drive Model VFD-INV-300).
+Error code E17 trips when the measured output frequency deviates from the command
+reference frequency by more than 4.5 Hz for 500 milliseconds, or when the drive
+detects phase angle instability during load modulation between 30 Hz and 60 Hz.
+
+Primary causes:
+- Loose encoder feedback cable shielding causing EMF noise interference.
+- Inadequate acceleration/deceleration ramp rates under rapid plant air demand swings.
+- Motor slip compensation parameter (Parameter P-402) out of factory tolerance.
+
+3. FIELD RECTIFICATION PROCEDURE
+--------------------------------------------------------------------------------
+Step 1: Inverter Lockout & Isolation:
+        Ensure drive DC bus capacitor voltage has discharged to < 24V DC before
+        opening drive cabinet enclosure door (wait minimum 10 minutes after LOTO).
+
+Step 2: Encoder & Grounding Inspection:
+        Inspect quadrature encoder cable connected to Terminal Block TB-4.
+        Verify ground braid is terminated to chassis star ground with < 0.1 ohm resistance.
+        Retighten terminal screws to 4.4 in-lbs (0.5 Nm).
+
+Step 3: Drive Parameter Verification (via Keypad Programmer):
+        Navigate to Parameter Group 4 (Motor Control):
+        - Parameter P-401 (Base Frequency): Verify set to exactly 60.0 Hz.
+        - Parameter P-402 (Slip Compensation): Adjust from default 1.2% to 0.8%.
+        - Parameter P-405 (Current Limit): Ensure set to 110% of FLA (Full Load Amps).
+        - Parameter P-108 (Accel Ramp Time): Set to 12.0 seconds (do not set below 10.0s).
+
+Step 4: Calibration Run:
+        Energize control power.
+        Execute static auto-tune sequence: Menu -> Calibration -> VFD Motor Identification.
+        Verify drive displays "TUNE OK". Clear E17 fault from memory.
+        Operate compressor in manual speed sweep from 1,800 RPM to 3,600 RPM.

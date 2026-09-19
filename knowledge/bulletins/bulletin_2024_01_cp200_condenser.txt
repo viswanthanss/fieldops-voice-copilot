@@ -1,0 +1,54 @@
+---
+document_id: TSB-2024-01
+document_type: service_bulletin
+equipment_type: compressor
+model: CP-200
+tenant_id: demo
+site_id: SITE-A
+revision: 1
+effective_date: 2024-01-20
+section: cooling_system
+---
+
+================================================================================
+TECHNICAL SERVICE BULLETIN: TSB-2024-01
+Subject: CP-200 Series Condenser Coil Cleaning & E17 Mitigation
+Applies To: All CP-200, CP-201, CP-202 Units Installed in Dusty Environments
+Date: January 20, 2024 | Revision: 1
+Author: IndustrialWorks Product Reliability Group
+================================================================================
+
+1. BACKGROUND
+--------------------------------------------------------------------------------
+Field monitoring data indicates an increased frequency of Error E17 (High Discharge
+Temperature) trips on CP-200 series compressors operating in heavy industrial and
+unfiltered manufacturing plant floors. In 82% of reported cases, the primary root
+cause was found to be micro-dust compaction within the condenser coil fins, reducing
+effective convective heat transfer area by up to 45%.
+
+2. SYMPTOMS
+--------------------------------------------------------------------------------
+- Intermittent E17 faults occurring during peak afternoon shifts or high ambient (>90°F) conditions.
+- Compressor runs normally unloaded, but discharge temperature escalates rapidly upon 100% step-load.
+- Cooling fan is operating at full RPM, but airflow across the discharge plenum is noticeably reduced.
+
+3. CORRECTIVE ACTION & ENHANCED CLEANING PROTOCOL
+--------------------------------------------------------------------------------
+Standard dry wiping of external fins is insufficient because particulate penetrates
+deep into the staggered fin matrix.
+
+Recommended Cleaning Procedure:
+1. Isolate main power (LOTO). Ensure unit is cooled below 100°F.
+2. Remove fan guard FG-200 and swing the fan cowl outward.
+3. Apply non-acidic aluminum coil cleaner (IW-CLN-902) using a low-pressure pump sprayer.
+   Allow 8–10 minutes dwell time for chemical breakdown of oil/dust cake.
+4. Back-flush the coil from the inside out using dry compressed air regulated to
+   maximum 35 PSIG (to avoid bending thin aluminum fins) or low-pressure warm water.
+5. Straighten any bent or crushed fins using fin comb tool FC-14 (14 fins/inch).
+6. Reassemble fan guard and verify blade tip clearance (minimum 0.25 inch / 6.3 mm).
+
+4. PREVENTATIVE MAINTENANCE UPDATE
+--------------------------------------------------------------------------------
+For units operating at Site A, the inspection frequency of condenser assembly CP200-RAD-01
+is hereby revised from 500 hours to 250 hours. Technicians must record static differential
+pressure across the coil at every bi-weekly PM round.

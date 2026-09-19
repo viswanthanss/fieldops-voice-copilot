@@ -1,0 +1,73 @@
+---
+document_id: SOP-COMP-002
+document_type: sop
+equipment_type: compressor
+model: CP-200
+tenant_id: demo
+site_id: SITE-A
+revision: 3
+effective_date: 2024-02-15
+section: thermal_incident_response
+---
+
+================================================================================
+STANDARD OPERATING PROCEDURE: HIGH TEMPERATURE RESPONSE & INVESTIGATION (CP-200)
+Document ID: SOP-COMP-002 | Revision: 3 | Effective Date: February 15, 2024
+Target Alarm: Error E17 — High Discharge Temperature (> 185°F / 85°C)
+Applicable Units: CP-200, CP-201, CP-202 (Compressors, Site A)
+================================================================================
+
+1. INCIDENT OVERVIEW
+--------------------------------------------------------------------------------
+Error E17 triggers automatically when thermocouple TT-201 at the cylinder head
+discharge port registers a temperature exceeding 185°F (85°C) for more than
+3 consecutive seconds. The IW-CTRL-3000 safety controller immediately trips
+main contactor M1 to prevent thermal seizure and valve breakdown.
+
+2. IMMEDIATE ACTIONS FOR FIELD TECHNICIAN
+--------------------------------------------------------------------------------
+2.1 Safety Isolation:
+    - Wear thermal gloves and eye protection. Discharge piping will be extremely hot.
+    - Confirm compressor motor has ceased rotation.
+    - Do NOT manually depress contactors or force the unit to run while hot.
+
+2.2 Thermal Dissipation Period:
+    - Allow minimum 15 to 20 minutes for passive cooling.
+    - Do NOT apply cold water or ice to hot cast-iron cylinder heads as thermal
+      shock can crack the casting.
+
+3. SYSTEMATIC ROOT-CAUSE DIAGNOSIS (PRIORITIZED CHECKLIST)
+--------------------------------------------------------------------------------
+Step 1: Condenser / Aftercooler Airflow Inspection:
+    - Inspect external condenser fin pack (Assembly CP200-RAD-01).
+    - Check for airborne debris, dust matting, oil film accumulation, or blocked intake.
+    - Inspect cooling fan drive belt (Part # IW-BLT-440B) for slippage or rupture.
+    - Check cooling fan electric motor for rotation and proper directional flow.
+
+Step 2: Coolant / Oil Cooler Inspection:
+    - On CP-201 and CP-202 models with liquid-to-air aftercoolers, verify closed-loop
+      coolant level in expansion reservoir.
+    - Check oil cooler differential temperature (normal drop: 20°F to 30°F).
+    - If oil cooler is warm to the touch across both inlet and outlet, thermal bypass
+      valve TCV-204 may be stuck open.
+
+Step 3: Discharge Valve Leakage (Blowby Analysis):
+    - A cracked or carbonized discharge reed valve allows compressed hot gas to
+      re-enter the cylinder during suction stroke, causing rapid heat accumulation.
+    - Inspect valve plate assembly VP-200-A. Look for carbon deposits or fatigue cracks.
+    - Replace valve reeds if seating surface shows discoloration or pitting.
+
+Step 4: Suction Air Filter Restriction:
+    - High compression ratios caused by choked suction filters increase discharge
+      temperatures exponentially.
+    - Inspect suction filter indicator (DP gauge). If red flag is visible, replace
+      air filter element (Part # IW-FLT-200A).
+
+4. CLEARING THE FAULT AND RETURNING TO SERVICE
+--------------------------------------------------------------------------------
+- Verify cylinder head temperature has dropped below 140°F (60°C).
+- If fin pack was dirty, clean using compressed dry air or approved industrial coil wash.
+- Clear error code E17 via HMI: Menu -> Diagnostics -> Clear Active Alarms.
+- Follow SOP-COMP-001 for the mandatory 5-minute unloaded restart.
+- Monitor temperature ramp rate. If discharge temp rises past 175°F within 10 minutes
+  of loaded operation, shut down immediately and replace discharge valve assembly.

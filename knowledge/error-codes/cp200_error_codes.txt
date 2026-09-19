@@ -1,0 +1,532 @@
+---
+document_id: CP200-ERR-001
+document_type: error_reference
+equipment_type: compressor
+model: CP-200
+tenant_id: demo
+site_id: SITE-A
+revision: 4
+effective_date: 2024-01-15
+---
+
+================================================================================
+INDUSTRIALWORKS CORPORATION
+CP-200 SERIES — ERROR CODE QUICK REFERENCE
+Document ID: CP200-ERR-001  |  Revision: 4  |  Effective: 2024-01-15
+Models Covered: CP-200, CP-201, CP-202
+================================================================================
+
+IMPORTANT — MODEL MISMATCH WARNING:
+This document applies ONLY to CP-200 series compressors (reciprocating type).
+CP-300 series compressors use a DIFFERENT error code system. Error codes with
+the same number (e.g., E17, E08) have DIFFERENT meanings on CP-300 units.
+ALWAYS verify the model on the unit nameplate before using this document.
+
+================================================================================
+QUICK REFERENCE ERROR CODE TABLE — CP-200 SERIES
+================================================================================
+
+CODE  | NAME                        | CATEGORY    | TRIP | RESTART
+------|-----------------------------|-------------|------|------------------
+E01   | STARTUP_FAIL                | Control     | YES  | Auto after fix
+E02   | LOW_VOLTAGE                 | Electrical  | YES  | Manual reset
+E03   | MOTOR_OVERLOAD              | Electrical  | YES  | Manual reset
+E04   | PHASE_LOSS                  | Electrical  | YES  | Manual reset
+E05   | PHASE_IMBALANCE             | Electrical  | YES  | Manual reset
+E06   | GROUND_FAULT                | Electrical  | YES  | Manual reset
+E07   | HIGH_DISCHARGE_PRESSURE     | Pressure    | YES  | Manual reset
+E08   | LOW_SUCTION_PRESSURE        | Pressure    | YES  | Manual reset
+E09   | DISCHARGE_PRESSURE_SENSOR   | Pressure    | YES  | Manual reset
+E10   | SUCTION_PRESSURE_SENSOR     | Pressure    | YES  | Manual reset
+E11   | HIGH_OIL_TEMPERATURE        | Thermal     | YES  | Manual reset
+E12   | LOW_OIL_PRESSURE            | Lubrication | YES  | Manual reset
+E13   | OIL_PRESSURE_SENSOR         | Lubrication | YES  | Manual reset
+E14   | OIL_LEVEL_LOW               | Lubrication | YES  | Manual reset
+E15   | INLET_VALVE_FAULT           | Mechanical  | YES  | Manual reset
+E16   | CAPACITY_VALVE_FAULT        | Mechanical  | YES  | Manual reset
+E17   | HIGH_DISCHARGE_TEMPERATURE  | Thermal     | YES  | Manual reset
+E18   | DISCHARGE_TEMP_SENSOR       | Thermal     | YES  | Manual reset
+E19   | AMBIENT_TEMP_HIGH           | Thermal     | YES  | Manual reset
+E20   | VIBRATION_FAULT             | Mechanical  | OPT  | Manual reset
+E21   | HIGH_DISCHARGE_PRESSURE_2   | Pressure    | YES  | Manual reset
+E22   | INTERSTAGE_PRESSURE         | Pressure    | YES  | Manual reset
+E23   | AFTERCOOLER_HIGH_TEMP       | Thermal     | YES  | Manual reset
+E24   | COMMS_FAULT                 | Control     | NO   | Auto
+E25   | CONTROL_BOARD_FAULT         | Control     | YES  | Factory service
+
+================================================================================
+DETAILED ERROR CODE ENTRIES
+================================================================================
+
+-------------------------------------------------------------------------------
+E01 — STARTUP_FAIL
+-------------------------------------------------------------------------------
+Full Name:       Startup Failure
+Category:        Control
+Trigger:         Unit failed to achieve run speed within 15 seconds of START command
+Description:     The IW-CTRL-3000 controller monitors motor speed during start.
+                 If the motor does not reach 1,750 RPM (nominal) within 15 seconds,
+                 E01 is latched and the motor starter de-energizes.
+Immediate Action:
+  1. Verify supply voltage is present and within range (460V ±5%)
+  2. Check motor starter contactor — test for welded contacts
+  3. Verify motor rotation direction (CW from fan end)
+  4. Check for mechanical binding (try to rotate shaft by hand)
+  5. Inspect starting capacitor if single-phase start assist is used
+Restart Procedure:
+  - Correct root cause; press RESET on HMI; press START; monitor startup sequence
+
+-------------------------------------------------------------------------------
+E02 — LOW_VOLTAGE
+-------------------------------------------------------------------------------
+Full Name:       Low Supply Voltage
+Category:        Electrical
+Trigger:         Supply voltage below 414V (90% of 460V nominal) for >2 seconds
+Description:     Sustained low voltage causes excessive motor current and heat.
+                 The controller protects the motor by tripping on under-voltage.
+Immediate Action:
+  1. Measure supply voltage at main disconnect (L1-L2, L2-L3, L3-L1)
+  2. If voltage is low, contact facility electrical department
+  3. Do not operate unit until voltage is restored to 437V minimum (95%)
+  4. Check for voltage drop under load — may indicate undersized supply conductors
+Restart Procedure:
+  - Verify voltage is above 437V; press RESET; press START
+
+-------------------------------------------------------------------------------
+E03 — MOTOR_OVERLOAD
+-------------------------------------------------------------------------------
+Full Name:       Motor Overload
+Category:        Electrical
+Trigger:         Motor current exceeds thermal overload relay setting for >10 seconds
+Description:     The overload relay tracks motor temperature by accumulating
+                 I²t (current-squared-time). When accumulated thermal capacity
+                 is exceeded, E03 trips. The relay must cool before reset is allowed.
+Immediate Action:
+  1. Measure motor current on all 3 phases (clamp meter at motor starter)
+  2. Verify motor rotation is CLOCKWISE (incorrect rotation causes overload)
+  3. Check for mechanical binding — unload the compressor if possible
+  4. Verify overload relay trip class (Class 10 for standard motors)
+  5. Measure motor winding resistance (balanced within 5% phase-to-phase)
+  6. Allow motor thermal overload relay to cool 10–15 minutes before reset
+Restart Procedure:
+  - After cooling, press RESET on overload relay; press RESET on HMI; press START
+  - Monitor motor amps on HMI; should not exceed FLA rating
+
+-------------------------------------------------------------------------------
+E04 — PHASE_LOSS
+-------------------------------------------------------------------------------
+Full Name:       Phase Loss
+Category:        Electrical
+Trigger:         One or more supply phases absent for >0.5 seconds
+Description:     Operating on two phases causes motor to draw 1.73x normal current
+                 on remaining phases, causing immediate overheating.
+Immediate Action:
+  1. Check supply voltage on all three phases at main disconnect
+  2. Inspect fuses — replace blown fuses with correct ampere and type
+  3. Check motor starter contacts — open contact causes single-phase operation
+  4. Verify three-phase continuity through all upstream disconnects and contactors
+Restart Procedure:
+  - Restore all three phases; press RESET; press START; verify three-phase current balance
+
+-------------------------------------------------------------------------------
+E05 — PHASE_IMBALANCE
+-------------------------------------------------------------------------------
+Full Name:       Phase Imbalance
+Category:        Electrical
+Trigger:         Phase-to-phase voltage difference exceeds 5% of average voltage
+Description:     Even minor voltage imbalance causes significant current imbalance
+                 (typically 6–10x the voltage imbalance percentage), accelerating
+                 motor winding deterioration.
+Immediate Action:
+  1. Measure L1-L2, L2-L3, L3-L1 voltages under load
+  2. Calculate imbalance: max deviation from average ÷ average × 100
+  3. If >5%, contact utility company or facility electrical department
+  4. Check for single-phase loads on the same distribution transformer
+Restart Procedure:
+  - Reduce voltage imbalance to <3%; press RESET; press START
+
+-------------------------------------------------------------------------------
+E06 — GROUND_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Ground Fault
+Category:        Electrical
+Trigger:         Ground fault current exceeds 50mA
+Description:     Indicates insulation breakdown in motor windings or supply cables.
+                 Do not restart without identifying the fault location.
+Immediate Action:
+  1. LOTO the unit — this is a safety-critical fault
+  2. Disconnect motor leads at starter and megohmmeter-test motor windings
+  3. Inspect motor power cables for insulation damage, chafing, or moisture entry
+  4. If motor insulation tests below 1 MΩ, motor requires rewinding or replacement
+Restart Procedure:
+  - Only restart after insulation fault is repaired and verified; press RESET; press START
+
+-------------------------------------------------------------------------------
+E07 — HIGH_DISCHARGE_PRESSURE
+-------------------------------------------------------------------------------
+Full Name:       High Discharge Pressure
+Category:        Pressure
+Trigger:         Discharge pressure exceeds 185 PSIG
+Description:     Protects system piping and compressor components from over-pressure.
+Immediate Action:
+  1. Stop unit; verify downstream piping is not blocked
+  2. Check pressure relief valve — verify it is not stuck closed
+  3. Verify unloader valve operation
+  4. Check pressure setpoint in controller (should be 175 PSIG max)
+Restart Procedure:
+  - Identify and correct overpressure cause; press RESET; press START
+
+-------------------------------------------------------------------------------
+E08 — LOW_SUCTION_PRESSURE
+-------------------------------------------------------------------------------
+Full Name:       Low Suction Pressure
+Category:        Pressure
+Trigger:         Suction pressure below 0.3 PSIG for >5 seconds
+
+IMPORTANT — MODEL DISTINCTION:
+E08 on CP-200 series = LOW SUCTION PRESSURE (pressure fault).
+E08 on CP-300 series = VIBRATION FAULT (mechanical fault). Different units, different meaning.
+
+Description:     Low suction pressure indicates restricted inlet flow, insufficient
+                 gas supply, or refrigerant system leak (if applicable). Running with
+                 low suction causes the compressor to work harder for less output,
+                 raising temperatures and reducing efficiency.
+Immediate Action:
+  1. Inspect inlet air filter — replace if clogged (most common cause)
+  2. Verify inlet isolation valve is fully open
+  3. Inspect suction piping for obstruction, kinking, or collapsed section
+  4. Check for refrigerant leak if unit is handling refrigerant gas:
+     - Use electronic leak detector around suction fittings
+     - Check sight glass for bubbles (low refrigerant charge)
+     - If leak detected, recover refrigerant, repair leak, recharge to spec
+  5. Measure suction line pressure with calibrated gauge (compare to HMI reading)
+Restart Procedure:
+  - Replace filter and/or repair leak; press RESET; press START
+  - Verify suction pressure rises to normal range (0.5–8 PSIG) within 60 seconds
+
+-------------------------------------------------------------------------------
+E09 — DISCHARGE_PRESSURE_SENSOR FAULT
+-------------------------------------------------------------------------------
+Full Name:       Discharge Pressure Sensor Fault
+Category:        Pressure
+Trigger:         4–20mA signal from discharge transducer outside 3.5–20.5mA range
+Immediate Action:
+  1. Disconnect transducer leads and measure loop current with ammeter
+  2. Verify supply voltage at transducer (24V DC ±10%)
+  3. Replace transducer if signal is not 4–20mA across 0–250 PSIG range
+     (Replacement: IW-PT-CP2-250)
+Restart Procedure: Replace or correct sensor; press RESET; press START
+
+-------------------------------------------------------------------------------
+E10 — SUCTION_PRESSURE_SENSOR FAULT
+-------------------------------------------------------------------------------
+Full Name:       Suction Pressure Sensor Fault
+Category:        Pressure
+Trigger:         4–20mA signal from suction transducer outside 3.5–20.5mA range
+Immediate Action: Same procedure as E09 (Replacement: IW-PT-CP2-050)
+Restart Procedure: Replace or correct sensor; press RESET; press START
+
+-------------------------------------------------------------------------------
+E11 — HIGH_OIL_TEMPERATURE
+-------------------------------------------------------------------------------
+Full Name:       High Oil Temperature
+Category:        Thermal
+Trigger:         Crankcase oil temperature exceeds 220°F
+Immediate Action:
+  1. Check oil level — low level causes oil to cycle faster and run hotter
+  2. Inspect oil cooler (if equipped) for fouling
+  3. Verify correct oil viscosity (SAE 30 non-detergent or IW-CompOil 100)
+  4. Check for contaminated oil (milky appearance = water contamination — change immediately)
+Restart Procedure:
+  - Allow oil to cool to <160°F; correct oil level/condition; press RESET; press START
+
+-------------------------------------------------------------------------------
+E12 — LOW_OIL_PRESSURE
+-------------------------------------------------------------------------------
+Full Name:       Low Oil Pressure
+Category:        Lubrication
+Trigger:         Oil pressure switch opens (pressure below 15 PSI) for >3 seconds
+
+CRITICAL: E12 is a catastrophic-failure-prevention fault. Running a reciprocating
+compressor without adequate oil pressure will destroy crankshaft and rod bearings
+within seconds. Do NOT bypass or ignore this fault.
+
+Immediate Action:
+  1. Check oil level on sight glass FIRST — most common cause is simply low oil
+  2. If oil level is correct, suspect oil pump or oil filter:
+     a. Spin-off the oil filter and check for excessive restriction
+     b. If filter bypasses, oil pressure may recover temporarily — replace filter
+  3. Inspect oil pressure switch with ohmmeter (should close at >18 PSI)
+  4. If oil pump is suspected, disassemble and inspect gear set for wear
+  5. Check crankcase for diluted oil (condensate or fuel dilution reduces viscosity)
+Restart Procedure:
+  - After repair, restart and IMMEDIATELY watch oil pressure on HMI
+  - If pressure does not reach 18 PSI within 10 seconds, STOP immediately
+  - Do not continue operation until oil pressure is confirmed within 18–35 PSI range
+
+-------------------------------------------------------------------------------
+E13 — OIL_PRESSURE_SENSOR FAULT
+-------------------------------------------------------------------------------
+Full Name:       Oil Pressure Sensor Fault
+Category:        Lubrication
+Trigger:         Oil pressure switch signal is in indeterminate state (wiring fault)
+Immediate Action: Inspect oil pressure switch wiring; test switch continuity; replace if faulty
+  (Replacement: IW-OPS-CP2-01)
+Restart Procedure: Replace sensor; press RESET; press START
+
+-------------------------------------------------------------------------------
+E14 — OIL_LEVEL_LOW
+-------------------------------------------------------------------------------
+Full Name:       Oil Level Low
+Category:        Lubrication
+Trigger:         Crankcase oil level float switch indicates oil below minimum level
+Immediate Action:
+  1. Verify visually on sight glass
+  2. Add oil to FULL mark (IW-CompOil 100 or SAE 30 non-detergent)
+  3. Inspect for oil leaks (drain plug, shaft seal, gaskets)
+  4. Record oil added in maintenance log to track consumption trend
+Restart Procedure: Add oil; press RESET; press START; verify sight glass is at FULL
+
+-------------------------------------------------------------------------------
+E15 — INLET_VALVE_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Inlet Valve Fault
+Category:        Mechanical
+Trigger:         Inlet valve actuator position feedback does not match command within 5 seconds
+Immediate Action:
+  1. Check air supply to pneumatic actuator (min 60 PSI supply required)
+  2. Inspect actuator linkage for binding or disconnection
+  3. Verify solenoid valve coil is energized (check 24V DC at coil terminals)
+  4. Replace solenoid valve or actuator if failed
+Restart Procedure: Correct valve fault; press RESET; press START
+
+-------------------------------------------------------------------------------
+E16 — CAPACITY_VALVE_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Capacity Control Valve Fault
+Category:        Mechanical
+Trigger:         Capacity control valve actuator does not respond within 5 seconds
+Immediate Action:
+  1. Inspect pneumatic tubing to capacity valve for kinks or disconnection
+  2. Test solenoid valve operation (24V DC coil; should click audibly when energized)
+  3. Verify control signal from IW-CTRL-3000 (0–10V analog output or PWM signal)
+  4. Replace capacity valve assembly if mechanically stuck
+Restart Procedure: Correct fault; press RESET; press START; verify capacity modulation
+
+-------------------------------------------------------------------------------
+E17 — HIGH_DISCHARGE_TEMPERATURE  *** CRITICAL FAULT — READ CAREFULLY ***
+-------------------------------------------------------------------------------
+Full Name:       High Discharge Temperature
+Category:        Thermal
+Trigger:         Discharge temperature exceeds 185°F (85°C) for >2 seconds
+
+MODEL: CP-200 SERIES ONLY. This is a THERMAL fault.
+CONTRAST WITH CP-300: E17 on CP-300 = MOTOR FREQUENCY FAULT (VFD electrical).
+These are entirely different conditions. Do not confuse.
+
+Description:
+  The discharge thermocouple (Type K, located on discharge flange) measures the
+  temperature of compressed air/gas leaving the compression chamber. When this
+  temperature exceeds 185°F for 2 or more continuous seconds, the controller
+  latches E17 and initiates an emergency shutdown to prevent:
+  - Cylinder head warping
+  - Reed valve thermal failure
+  - Oil coking on cylinder walls
+  - Downstream piping thermal damage
+
+Warning Level:
+  W-HTEMP (Warning) activates at 175°F. Investigate immediately when W-HTEMP appears.
+  You typically have 5–10 minutes before conditions escalate to E17 fault shutdown.
+
+Root Cause (in frequency order):
+  #1. FOULED CONDENSER COILS (>60% of all E17 incidents)
+      The air-cooled condenser coils accumulate dust and debris, blocking airflow.
+      Per Bulletin BULL-2024-001, clean every 6 months in industrial environments.
+      If buildup >1/8 inch is visible in fin channels, cleaning is overdue.
+
+  #2. COOLING FAN SYSTEM FAILURE
+      Belt broken or slipping: belt-driven fan loses speed or stops completely.
+      Check belt tension and condition at 100-hour intervals.
+      Fan blade cracked or missing: reduces airflow by 40–80%.
+      Fan motor failed: test voltage and current at motor terminals.
+
+  #3. COOLANT SYSTEM (CP-202 with water aftercooler option only)
+      Cooling water flow below 15 GPM: check supply valve and strainer.
+      Cooling water temperature above 85°F: check cooling tower operation.
+      Fouled aftercooler tubes: clean per annual maintenance schedule.
+
+  #4. AMBIENT TEMPERATURE TOO HIGH
+      Unit rating: 32–115°F ambient. Above 115°F, de-rate or relocate unit.
+      Check ventilation in compressor room — ensure adequate exhaust airflow.
+
+  #5. DEFECTIVE THERMOCOUPLE OR WIRING
+      Verify actual discharge temperature with calibrated thermometer.
+      If HMI shows >185°F but measured temp is <175°F, suspect TC or wiring.
+
+Immediate Action (Step-by-Step):
+  1. STOP COMPRESSOR — press STOP button immediately
+  2. Do NOT press RESET and restart without investigation
+  3. Allow unit to cool — minimum 15 MINUTES before touching discharge components
+  4. After cooling, inspect condenser coils:
+     - Remove fan guard (4 × 1/4-in hex bolts)
+     - Look through fins with flashlight — if fins are clogged, clean per Section 5.5
+     - Minimum 1/8-in clear view through fins required
+  5. Check drive belt for cooling fan:
+     - Belt should be taut (3/8–1/2 in deflection at midspan)
+     - Inspect for cracking, glazing, or missing belt
+     - Fan should rotate when motor runs — verify by observation (with guard off, CAUTION!)
+  6. Verify fan blade condition — no cracks, bending, missing material
+  7. If cooling water circuit: check supply valve, strainer, and flow rate (min 15 GPM)
+  8. Verify ambient temperature is within spec (<115°F at compressor air inlet)
+  9. If all mechanical checks pass, verify thermocouple reading with calibrated probe
+
+Restart Procedure — E17 (CP-200 Series):
+  Step 1: Confirm the root cause has been identified and corrected
+  Step 2: Verify HMI discharge temperature reads below 120°F (unit must be cool)
+  Step 3: Press RESET button on HMI panel (fault indicator extinguishes)
+  Step 4: Press START; unit enters 30-second unloaded warm-up phase
+  Step 5: Monitor discharge temperature on HMI during warm-up
+  Step 6: After loading, discharge temperature should stabilize below 165°F
+  Step 7: If temperature climbs above 175°F (W-HTEMP) within 10 minutes, STOP
+           and re-investigate — root cause was not fully corrected
+  Step 8: Document in maintenance log:
+           - Date and time of fault
+           - Discharge temperature at fault (from HMI history)
+           - Root cause identified
+           - Corrective action taken
+           - Post-restart temperature readings (5, 10, 15 min)
+
+Associated Documents:
+  - SOP-HITEMP-001: High Temperature Response Procedure
+  - SOP-COMP-001: Compressor Emergency Restart SOP
+  - BULL-2024-001: Condenser Cleaning Frequency Update
+  - CP200-SVC-001: Section 5.5 (Condenser Coil Cleaning) and Section 6.2
+
+-------------------------------------------------------------------------------
+E18 — DISCHARGE_TEMP_SENSOR FAULT
+-------------------------------------------------------------------------------
+Full Name:       Discharge Temperature Sensor Fault
+Category:        Thermal
+Trigger:         Type-K thermocouple signal outside valid range (open circuit or short)
+Immediate Action:
+  1. Inspect thermocouple wiring at controller terminal block (J7 pins 1–2)
+  2. Measure thermocouple resistance (should be <5Ω; open = broken TC)
+  3. Replace thermocouple if failed (IW-TC-CP2-01)
+  4. Verify TC extension cable is not routed near high-voltage wiring (noise source)
+Restart Procedure: Replace TC; press RESET; press START; verify temperature reading is valid
+
+-------------------------------------------------------------------------------
+E19 — AMBIENT_TEMP_HIGH
+-------------------------------------------------------------------------------
+Full Name:       Ambient Temperature High
+Category:        Thermal
+Trigger:         Ambient temperature sensor on inlet air reads above 120°F
+Immediate Action:
+  1. Verify actual ambient temp with calibrated thermometer
+  2. Check room ventilation — ensure exhaust louvers are open and fans operational
+  3. Move unit to cooler location or provide supplemental ventilation
+  4. If sensor is suspect, compare to building BMS ambient reading
+Restart Procedure: Reduce ambient temp to <115°F; press RESET; press START
+
+-------------------------------------------------------------------------------
+E20 — VIBRATION_FAULT (Optional)
+-------------------------------------------------------------------------------
+Full Name:       Vibration Fault
+Category:        Mechanical
+Trigger:         Vibration switch mounted on skid frame activates (optional feature)
+Note:            This is an OPTIONAL feature requiring the IW-VIB-CP2 switch kit.
+                 Not all CP-200 units have this feature installed.
+                 On CP-300 series, E20 = BEARING TEMPERATURE (different again).
+Immediate Action:
+  1. Identify source of excessive vibration (imbalance, loose mounting, misalignment)
+  2. Tighten all skid mounting bolts (torque: 75 ft-lb for 1/2-in anchor bolts)
+  3. Check belt alignment (for fan belt — see Section 5.2)
+  4. If vibration persists, perform vibration analysis to identify frequency
+Restart Procedure: Correct vibration source; press RESET; press START
+
+-------------------------------------------------------------------------------
+E21 — HIGH_DISCHARGE_PRESSURE_2
+-------------------------------------------------------------------------------
+Full Name:       High Discharge Pressure — Secondary Transducer
+Category:        Pressure
+Trigger:         Secondary discharge pressure transducer reads >190 PSIG
+Description:     Redundant pressure protection. If E21 fires without E07, the
+                 primary transducer (E07) may have failed.
+Immediate Action: Same as E07; also compare primary and secondary transducer readings
+Restart Procedure: Correct pressure fault; press RESET; press START
+
+-------------------------------------------------------------------------------
+E22 — INTERSTAGE_PRESSURE FAULT
+-------------------------------------------------------------------------------
+Full Name:       Interstage Pressure Out of Range
+Category:        Pressure
+Trigger:         Interstage pressure reading outside 55–95 PSIG (CP-202 only)
+Note:            CP-200 and CP-201 do not have interstage pressure monitoring.
+                 E22 only applies to CP-202 two-stage units.
+Immediate Action:
+  1. Check first-stage discharge valve (reed valve) condition
+  2. Check intercooler for fouling or blockage
+  3. Verify interstage pressure transducer calibration
+Restart Procedure: Correct interstage fault; press RESET; press START
+
+-------------------------------------------------------------------------------
+E23 — AFTERCOOLER_HIGH_TEMP
+-------------------------------------------------------------------------------
+Full Name:       Aftercooler Outlet Temperature High
+Category:        Thermal
+Trigger:         Aftercooler outlet temperature exceeds 120°F (CP-201/CP-202 with aftercooler)
+Immediate Action:
+  1. Clean aftercooler tubes (air-cooled) or check water flow (water-cooled aftercooler)
+  2. Verify aftercooler fan operation (CP-201)
+  3. Verify cooling water flow rate ≥15 GPM (CP-202 water aftercooler)
+Restart Procedure: Correct aftercooler fault; press RESET; press START
+
+-------------------------------------------------------------------------------
+E24 — COMMS_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Communications Fault
+Category:        Control
+Trigger:         Modbus RTU or BACnet MS/TP timeout (no response in 10 seconds)
+Note:            This is a NON-TRIP fault — the unit continues to run but logs the fault.
+Immediate Action:
+  1. Check Modbus/BACnet network cable connections at controller (terminal J12)
+  2. Verify SCADA system is communicating on the correct Modbus address (default: 1)
+  3. Check baud rate setting matches SCADA (default: 19200, 8N1)
+  4. If standalone operation is acceptable, E24 may be acknowledged and unit left running
+Restart Procedure: N/A — non-trip; acknowledge and investigate communication path
+
+-------------------------------------------------------------------------------
+E25 — CONTROL_BOARD_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Control Board Fault
+Category:        Control
+Trigger:         IW-CTRL-3000 internal self-test detects processor or memory fault
+Description:     A serious controller fault. Do not attempt field repair.
+Immediate Action:
+  1. Attempt power cycle: remove main power for 30 seconds; restore power
+  2. If E25 returns, do not continue to reset/restart — controller board is faulty
+  3. Contact IndustrialWorks technical support (1-800-555-4000)
+  4. Record all HMI-displayed fault codes before powering down
+Restart Procedure: Controller board replacement required; factory service recommended
+
+================================================================================
+WARNING CODE QUICK REFERENCE — CP-200 SERIES (Non-Trip Alerts)
+================================================================================
+
+CODE   | NAME              | DESCRIPTION                           | HMI COLOR
+-------|-------------------|---------------------------------------|----------
+W-HTEMP| HIGH TEMP WARNING | Discharge temp 175–185°F              | YELLOW
+W-HPRS | HIGH PRESS WARN   | Discharge pressure 170–185 PSIG       | YELLOW
+W-LOIL | LOW OIL WARNING   | Oil level approaching low mark        | YELLOW
+W-FILT | FILTER WARNING    | Estimated filter life <10% remaining  | YELLOW
+W-MANT | MAINTENANCE DUE   | Maintenance interval reached          | BLUE
+W-COMM | COMMS WARNING     | Communication retry count increasing  | YELLOW
+
+Note: All warnings are logged in the HMI fault history. Acknowledge warnings
+immediately and address the underlying condition before it escalates to a fault.
+
+================================================================================
+END OF DOCUMENT
+Document ID: CP200-ERR-001  |  Revision: 4  |  Date: 2024-01-15
+IndustrialWorks Corporation — Confidential Technical Documentation
+================================================================================

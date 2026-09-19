@@ -1,0 +1,109 @@
+# ============================================================
+# FieldOps Voice Copilot — .gitignore
+# ============================================================
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.log
+.hypothesis/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+.pyenv/
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+.nuxt
+dist/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.yarn-integrity
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker
+docker-compose.override.yml
+
+# Evaluation results (keep structure, ignore results)
+evaluation/results/*.json
+evaluation/results/*.csv
+evaluation/results/*.html
+
+# Alembic
+backend/alembic/versions/*.py
+
+# Moss index cache (regenerated)
+.moss_cache/
+*.moss_index
+
+# Logs
+logs/
+*.log
+agent.log
+backend.log

@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # ── Backend Control Plane (FastAPI) ──────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fieldops-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production-1234567890}
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - DATABASE_URL=${DATABASE_URL:-sqlite+aiosqlite:///./fieldops.db}
+      - LIVEKIT_URL=${LIVEKIT_URL:-wss://your-project.livekit.cloud}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY:-}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET:-}
+      - CORS_ORIGINS=http://localhost:3000
+      - RATE_LIMIT_PER_MINUTE=100
+      - OTEL_ENDPOINT=${OTEL_ENDPOINT:-}
+      - OTEL_SERVICE_NAME=fieldops-control-plane
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── LiveKit Voice Agent Plane ───────────────────────────────────────────────
+  agent:
+    build:
+      context: .
+      dockerfile: agent/Dockerfile
+    container_name: fieldops-agent
+    environment:
+      - LIVEKIT_URL=${LIVEKIT_URL:-wss://your-project.livekit.cloud}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY:-}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY:-}
+      - MOSS_PROJECT_ID=${MOSS_PROJECT_ID:-}
+      - MOSS_PROJECT_KEY=${MOSS_PROJECT_KEY:-}
+      - MOSS_INDEX_NAME=fieldops-knowledge-v1
+      - MOSS_INDEX_VERSION=1.0.0
+      - BACKEND_URL=http://backend:8000
+      - REDIS_URL=${REDIS_URL:-}
+      - OTEL_ENDPOINT=${OTEL_ENDPOINT:-}
+      - OTEL_SERVICE_NAME=fieldops-agent
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ── Next.js Technician Workstation UI ───────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fieldops-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_LIVEKIT_URL=${LIVEKIT_URL:-wss://your-project.livekit.cloud}
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ── Redis (Production Distributed Session Store) ────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: fieldops-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    profiles: ["production"]

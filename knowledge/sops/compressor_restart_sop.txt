@@ -1,0 +1,84 @@
+---
+document_id: SOP-COMP-001
+document_type: sop
+equipment_type: compressor
+model: CP-200
+tenant_id: demo
+site_id: SITE-A
+revision: 2
+effective_date: 2024-02-01
+section: emergency_restart
+---
+
+================================================================================
+STANDARD OPERATING PROCEDURE: COMPRESSOR EMERGENCY RESTART (CP-200 SERIES)
+Document ID: SOP-COMP-001 | Revision: 2 | Effective Date: February 1, 2024
+Authorizing Body: Plant Safety & Reliability Engineering, Site A
+Target Equipment: CP-200, CP-201, CP-202 Industrial Reciprocating Compressors
+================================================================================
+
+1. PURPOSE & APPLICABILITY
+--------------------------------------------------------------------------------
+This SOP governs the controlled restart procedure following an automated safety
+shutdown or emergency fault trip on any CP-200 series reciprocating compressor.
+Under no circumstances should an emergency restart bypass safety interlocks.
+
+2. PREREQUISITES & SAFETY CHECKS
+--------------------------------------------------------------------------------
+2.1 Lockout/Tagout (LOTO) Verification:
+    If maintenance work or mechanical inspection was performed, verify all LOTO
+    locks and tags have been removed by the lead technician.
+2.2 Ambient and Casing Temperature Check:
+    For thermal trip codes (specifically E17 High Discharge Temperature), ensure
+    a minimum 15-minute cool-down interval before attempting any restart sequence.
+    Discharge manifold temperature must fall below 140°F (60°C).
+2.3 Oil Level & Pressure Verification:
+    Inspect sight glass on crankcase. Level must be between 50% and 75% of sight
+    glass height using ISO VG 100 synthetic reciprocating compressor lubricant.
+2.4 Suction / Discharge Valves:
+    Confirm suction isolation valve V-101 is fully open.
+    Confirm discharge check valve CV-104 is functional and line is pressurized.
+
+3. STEP-BY-STEP RESTART PROCEDURE
+--------------------------------------------------------------------------------
+Step 1: Inspect Fault Status on IW-CTRL-3000 HMI:
+        Review the Active Alarm register. Note the trip code (e.g., E17, E08, E03).
+        Acknowledge alarm on the touchscreen panel.
+
+Step 2: Clear Mechanical Cause:
+        Verify that the physical root cause of the shutdown has been resolved.
+        (For E17: clean condenser fins, check cooling fan belt, check coolant).
+
+Step 3: Reset Controller Fault Relay:
+        Press and hold the yellow RESET button on the front panel for 3 seconds.
+        Observe the FAULT LED transition from steady red to flashing amber, then off.
+
+Step 4: Unloaded Pre-Start Sequence:
+        Initiate UNLOADED START mode from the HMI.
+        The suction unloader solenoids will energize, holding suction valves open.
+
+Step 5: Motor Energization:
+        Press START. Motor will crank and ramp to base speed (1,750 RPM) under
+        zero head pressure.
+        Run unloaded for exactly 300 seconds (5 minutes).
+        Monitor oil pressure transducer: must reach >= 35 PSIG within 15 seconds.
+
+Step 6: Step-Loading:
+        Close unloader stage 1 at 5 minutes (50% load).
+        Monitor discharge pressure and vibration for 2 minutes.
+        Close unloader stage 2 at 7 minutes (100% full load).
+
+Step 7: Post-Restart Verification:
+        Record the following baseline readings in the maintenance log:
+        - Discharge temperature (must stabilize between 160°F and 180°F)
+        - Discharge pressure (standard operating: 125–175 PSIG)
+        - Motor current (must be <= 68 Amperes on 460V 3-phase)
+        - Oil differential pressure (must remain 35–50 PSID)
+
+4. EMERGENCY ABORT CRITERIA
+--------------------------------------------------------------------------------
+Immediately press the Emergency Stop (E-Stop) pushbutton if:
+- Crankcase or cylinder head produces knocking or abnormal metallic clatter.
+- Discharge temperature increases at a rate exceeding 5°F per minute.
+- Oil pressure drops below 25 PSIG during loaded run.
+- Motor draw exceeds 75 Amperes full-load continuous.

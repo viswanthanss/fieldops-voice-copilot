@@ -1,0 +1,101 @@
+{
+  "index_name": "fieldops-knowledge-v1",
+  "index_version": "1.0.0",
+  "created_at": "2024-03-01T00:00:00Z",
+  "target_equipment": ["compressor"],
+  "models_indexed": ["CP-200", "CP-300"],
+  "documents": [
+    {
+      "document_id": "CP200-SVC-001",
+      "file": "knowledge/manuals/cp200_service_manual.txt",
+      "document_type": "service_manual",
+      "equipment_type": "compressor",
+      "model": "CP-200",
+      "tenant_id": "demo",
+      "site_id": "SITE-A",
+      "revision": "4",
+      "effective_date": "2024-01-15",
+      "key_error_codes": ["E01", "E03", "E08", "E12", "E17", "E25"],
+      "e17_definition": "HIGH_DISCHARGE_TEMPERATURE (>185F)"
+    },
+    {
+      "document_id": "CP300-SVC-001",
+      "file": "knowledge/manuals/cp300_service_manual.txt",
+      "document_type": "service_manual",
+      "equipment_type": "compressor",
+      "model": "CP-300",
+      "tenant_id": "demo",
+      "site_id": "SITE-B",
+      "revision": "2",
+      "effective_date": "2024-03-01",
+      "key_error_codes": ["E01", "E03", "E08", "E12", "E17", "E25"],
+      "e17_definition": "MOTOR_FREQUENCY_FAULT (VFD)"
+    },
+    {
+      "document_id": "CP200-ERR-001",
+      "file": "knowledge/error-codes/cp200_error_codes.txt",
+      "document_type": "error_reference",
+      "equipment_type": "compressor",
+      "model": "CP-200",
+      "tenant_id": "demo",
+      "site_id": "SITE-A",
+      "revision": "4",
+      "effective_date": "2024-01-15"
+    },
+    {
+      "document_id": "CP300-ERR-001",
+      "file": "knowledge/error-codes/cp300_error_codes.txt",
+      "document_type": "error_reference",
+      "equipment_type": "compressor",
+      "model": "CP-300",
+      "tenant_id": "demo",
+      "site_id": "SITE-B",
+      "revision": "2",
+      "effective_date": "2024-03-01"
+    },
+    {
+      "document_id": "SOP-COMP-001",
+      "file": "knowledge/sops/compressor_restart_sop.txt",
+      "document_type": "sop",
+      "equipment_type": "compressor",
+      "model": "CP-200",
+      "tenant_id": "demo",
+      "site_id": "SITE-A",
+      "revision": "2",
+      "effective_date": "2024-02-01"
+    },
+    {
+      "document_id": "SOP-COMP-002",
+      "file": "knowledge/sops/high_temp_response_sop.txt",
+      "document_type": "sop",
+      "equipment_type": "compressor",
+      "model": "CP-200",
+      "tenant_id": "demo",
+      "site_id": "SITE-A",
+      "revision": "3",
+      "effective_date": "2024-02-15"
+    },
+    {
+      "document_id": "TSB-2024-01",
+      "file": "knowledge/bulletins/bulletin_2024_01_cp200_condenser.txt",
+      "document_type": "service_bulletin",
+      "equipment_type": "compressor",
+      "model": "CP-200",
+      "tenant_id": "demo",
+      "site_id": "SITE-A",
+      "revision": "1",
+      "effective_date": "2024-01-20"
+    },
+    {
+      "document_id": "TSB-2023-08",
+      "file": "knowledge/bulletins/bulletin_2023_08_cp300_vfd.txt",
+      "document_type": "service_bulletin",
+      "equipment_type": "compressor",
+      "model": "CP-300",
+      "tenant_id": "demo",
+      "site_id": "SITE-B",
+      "revision": "2",
+      "effective_date": "2023-08-14"
+    }
+  ]
+}

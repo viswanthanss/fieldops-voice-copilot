@@ -1,0 +1,556 @@
+---
+document_id: CP300-ERR-001
+document_type: error_reference
+equipment_type: compressor
+model: CP-300
+tenant_id: demo
+site_id: SITE-B
+revision: 2
+effective_date: 2024-03-01
+---
+
+================================================================================
+INDUSTRIALWORKS CORPORATION
+CP-300 SERIES — ERROR CODE QUICK REFERENCE
+Document ID: CP300-ERR-001  |  Revision: 2  |  Effective: 2024-03-01
+Models Covered: CP-300, CP-301, CP-302
+================================================================================
+
+CRITICAL — MODEL MISMATCH WARNING:
+This document applies ONLY to CP-300 series compressors (twin-screw, VFD type).
+CP-200 series compressors (reciprocating type) use a DIFFERENT error code system.
+Several error code numbers that appear in both series carry ENTIRELY DIFFERENT
+meanings. The most important distinction:
+
+  E17 on CP-200 series = HIGH DISCHARGE TEMPERATURE (thermal fault)
+  E17 on CP-300 series = MOTOR FREQUENCY FAULT (VFD fault) — NOT a temperature issue
+
+  E08 on CP-200 series = LOW SUCTION PRESSURE (pressure fault)
+  E08 on CP-300 series = VIBRATION FAULT (mechanical fault) — completely different
+
+Using CP-200 documentation to diagnose a CP-300 fault (or vice versa) WILL lead
+to incorrect diagnosis, wasted time, and possible equipment damage.
+Always verify model series on the unit nameplate before using this document.
+
+================================================================================
+QUICK REFERENCE ERROR CODE TABLE — CP-300 SERIES
+================================================================================
+
+CODE  | NAME                        | CATEGORY    | TRIP | RESTART METHOD
+------|-----------------------------|-------------|------|----------------------
+E01   | STARTUP_FAIL                | Control     | YES  | Manual reset
+E02   | LOW_VOLTAGE                 | Electrical  | YES  | Manual reset
+E03   | MOTOR_OVERLOAD              | Electrical  | YES  | Manual reset
+E04   | PHASE_LOSS                  | Electrical  | YES  | Manual reset
+E05   | PHASE_IMBALANCE             | Electrical  | YES  | Manual reset
+E06   | GROUND_FAULT                | Electrical  | YES  | Manual reset
+E07   | HIGH_DISCHARGE_PRESSURE     | Pressure    | YES  | Manual reset
+E08   | VIBRATION_FAULT             | Mechanical  | YES  | Manual reset
+E09   | DISCHARGE_PRESSURE_SENSOR   | Pressure    | YES  | Manual reset
+E10   | OIL_SEPARATOR_DP            | Oil System  | YES  | Manual reset
+E11   | HIGH_OIL_TEMPERATURE        | Thermal     | YES  | Manual reset
+E12   | LOW_OIL_PRESSURE            | Lubrication | YES  | Manual reset
+E13   | OIL_PRESSURE_SENSOR         | Lubrication | YES  | Manual reset
+E14   | OIL_LEVEL_LOW               | Lubrication | YES  | Manual reset
+E15   | INLET_VALVE_FAULT           | Mechanical  | YES  | Manual reset
+E16   | CAPACITY_VALVE_FAULT        | Mechanical  | YES  | Manual reset
+E17   | MOTOR_FREQUENCY_FAULT       | VFD         | YES  | VFD reset required
+E18   | VFD_OVERTEMPERATURE         | VFD         | YES  | Manual reset
+E19   | VFD_OVERCURRENT             | VFD         | YES  | Manual reset
+E20   | BEARING_TEMPERATURE         | Thermal     | OPT  | Manual reset
+E21   | AFTERCOOLER_HIGH_TEMP       | Thermal     | YES  | Manual reset
+E22   | COOLING_WATER_FLOW          | Cooling     | YES  | Manual reset
+E23   | COOLING_WATER_TEMP          | Cooling     | YES  | Manual reset
+E24   | COMMS_FAULT                 | Control     | NO   | Auto
+E25   | CONTROL_BOARD_FAULT         | Control     | YES  | Factory service
+
+================================================================================
+DETAILED ERROR CODE ENTRIES — CP-300 SERIES
+================================================================================
+
+-------------------------------------------------------------------------------
+E01 — STARTUP_FAIL
+-------------------------------------------------------------------------------
+Full Name:       Startup Failure (VFD-based)
+Category:        Control
+Trigger:         VFD did not achieve minimum frequency (20 Hz) within 20 seconds
+Description:     On CP-300, startup failure typically indicates VFD problems
+                 (vs. CP-200 where it indicates mechanical or electrical motor issues).
+Immediate Action:
+  1. Verify VFD is powered (check VFD "READY" indicator on door panel)
+  2. Check VFD fault log (HMI → Faults → VFD Log)
+  3. Verify VFD input voltage is present (460V ±5%)
+  4. Check VFD enable signal wiring (24V DC from IW-CTRL-5000 to VFD enable input)
+  5. Verify VFD parameters P2.01 (accel time) is not set too aggressively (<5 seconds)
+Restart Procedure: Press RESET on HMI → press RESET on VFD if separate fault → press START
+
+-------------------------------------------------------------------------------
+E02 — LOW_VOLTAGE
+-------------------------------------------------------------------------------
+Full Name:       Low Supply Voltage
+Category:        Electrical
+Trigger:         Supply voltage below 414V for >2 seconds (measured at VFD input)
+Immediate Action: Same as CP-200 E02; measure all three phases at main disconnect
+Restart Procedure: Restore voltage to >437V; press RESET; press START
+
+-------------------------------------------------------------------------------
+E03 — MOTOR_OVERLOAD
+-------------------------------------------------------------------------------
+Full Name:       Motor Overload
+Category:        Electrical
+Trigger:         VFD output current exceeds 110% of motor FLA for >10 seconds
+Description:     On CP-300, motor overload is detected by VFD current monitoring
+                 (vs. separate thermal overload relay on CP-200).
+Immediate Action:
+  1. Check VFD current log (HMI → Data → VFD Current History)
+  2. Verify VFD parameter P3.01 (current limit) matches motor FLA
+  3. Inspect screw element for mechanical overload or binding
+  4. Verify VFD output frequency is within normal operating range (30–65 Hz)
+  5. Measure motor winding resistance (balanced within 5% phase-to-phase)
+Restart Procedure: Correct overload cause; press RESET on VFD; press RESET on HMI; press START
+
+-------------------------------------------------------------------------------
+E04 — PHASE_LOSS
+-------------------------------------------------------------------------------
+Full Name:       Phase Loss (VFD Input)
+Category:        Electrical
+Trigger:         VFD input phase loss detection algorithm activates
+Description:     The VFD monitors DC bus ripple to detect input phase loss.
+Immediate Action: Same as CP-200 E04; restore three-phase supply
+Restart Procedure: Restore three-phase power; press RESET; press START
+
+-------------------------------------------------------------------------------
+E05 — PHASE_IMBALANCE
+-------------------------------------------------------------------------------
+Full Name:       Phase Imbalance
+Category:        Electrical
+Trigger:         Phase-to-phase voltage imbalance >2% (stricter than CP-200's 5%)
+Description:     CP-300 VFD is more sensitive to voltage imbalance than CP-200
+                 motor direct-on-line start. Even 2% imbalance causes DC bus ripple
+                 that degrades VFD capacitors and can trigger spurious E17 faults.
+Immediate Action: Measure and correct phase imbalance; target <1.5% imbalance for CP-300
+Restart Procedure: Correct imbalance; press RESET; press START
+
+-------------------------------------------------------------------------------
+E06 — GROUND_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Ground Fault
+Category:        Electrical
+Trigger:         VFD ground fault detection: leakage current >20mA
+                 (vs. CP-200's 50mA threshold — VFD is more sensitive)
+Immediate Action:
+  1. Check motor shaft grounding ring (installed at factory; must not be removed)
+  2. Verify VFD output cable shielding is properly terminated at VFD end only
+  3. Megohmmeter test motor windings (>100 MΩ required for VFD-driven motors)
+  4. Inspect VFD output cable insulation for damage
+Restart Procedure: Repair insulation fault; reinstall ground ring if missing; press RESET; START
+
+-------------------------------------------------------------------------------
+E07 — HIGH_DISCHARGE_PRESSURE
+-------------------------------------------------------------------------------
+Full Name:       High Discharge Pressure
+Category:        Pressure
+Trigger:         Discharge pressure exceeds 155 PSIG (CP-300) or 175 PSIG (CP-301/302)
+Immediate Action: Check downstream piping for blockage; verify pressure setpoint
+Restart Procedure: Correct pressure fault; press RESET; press START
+
+-------------------------------------------------------------------------------
+E08 — VIBRATION_FAULT  *** IMPORTANT — DIFFERENT FROM CP-200 E08 ***
+-------------------------------------------------------------------------------
+Full Name:       Vibration Fault
+Category:        Mechanical
+Trigger:         Vibration sensor reading exceeds 7.1 mm/s RMS for >5 seconds
+
+CRITICAL MODEL DISTINCTION:
+E08 on CP-300 = VIBRATION FAULT (mechanical).
+E08 on CP-200 = LOW SUCTION PRESSURE (pressure fault).
+Do not apply CP-200 E08 diagnostics (check inlet filter, check for refrigerant leak)
+to a CP-300 unit displaying E08. The causes and corrective actions are completely different.
+
+Description:     The CP-300 series contains a vibration sensor (IEPe accelerometer)
+                 mounted on the compressor element housing. This sensor monitors
+                 vibration in mm/s RMS continuously. The 7.1 mm/s trip threshold
+                 corresponds to ISO 10816-3 Severity Zone C/D boundary for
+                 industrial machinery.
+
+                 Elevated vibration on a screw compressor is a serious condition
+                 indicating bearing degradation, rotor damage, or coupling failure.
+                 Unlike reciprocating compressors, screw elements are balanced and
+                 should run very smoothly (target: <2.5 mm/s at rated speed).
+
+Immediate Action:
+  1. STOP UNIT IMMEDIATELY — continued operation with high vibration will
+     cause rapid bearing failure (potentially within hours of continued operation)
+  2. Record vibration level from HMI fault log (HMI → Faults → E08 detail)
+  3. Measure vibration at both compressor element bearing housings with vibration pen
+     - Drive end: target <2.5 mm/s; trip concern >4.0 mm/s
+     - Non-drive end: target <2.5 mm/s; trip concern >4.0 mm/s
+  4. Check oil injection system:
+     - Verify oil level is at FULL mark
+     - Confirm oil injection temperature is 140–160°F
+     - Inspect oil injection strainer for blockage
+  5. Inspect inlet air filter — look for breach or debris bypass that could
+     cause debris ingestion into screw element
+  6. Check flexible coupling insert (IW-COUP-CP3-01) for cracking or deterioration
+  7. Tighten all mounting bolts to specified torque (55 ft-lb M12 isolator bolts)
+Restart Procedure:
+  - If vibration cause is found and corrected, press RESET; press START
+  - Monitor vibration level immediately after restart
+  - If vibration returns to >4 mm/s, shut down and contact IndustrialWorks service
+  - Do NOT operate unit if bearing vibration exceeds 4 mm/s — schedule inspection
+
+-------------------------------------------------------------------------------
+E09 — DISCHARGE_PRESSURE_SENSOR FAULT
+-------------------------------------------------------------------------------
+Full Name:       Discharge Pressure Sensor Fault
+Category:        Pressure
+Trigger:         Discharge pressure transducer signal outside valid range
+Immediate Action: Verify transducer wiring; replace transducer if signal invalid
+  (Replacement: IW-PT-CP3-200)
+Restart Procedure: Replace sensor; press RESET; press START
+
+-------------------------------------------------------------------------------
+E10 — OIL_SEPARATOR_DP (Differential Pressure)
+-------------------------------------------------------------------------------
+Full Name:       Oil Separator High Differential Pressure
+Category:        Oil System
+Trigger:         Differential pressure across oil separator element exceeds 18 PSI
+Description:     High separator DP indicates the separator element is saturated or
+                 blocked, causing increased oil carryover into the compressed air.
+                 This fault does NOT exist on CP-200 series (different oil system).
+Immediate Action:
+  1. Check hours since last separator element change (interval: 1,500 hours)
+  2. Verify DP measurement at separator using manual gauges
+  3. If separator is overdue for replacement or DP confirmed high, replace element
+  4. Replacement element: IW-OILSEP-CP3-01
+Restart Procedure: Replace separator element; press RESET; press START
+
+-------------------------------------------------------------------------------
+E11 — HIGH_OIL_TEMPERATURE
+-------------------------------------------------------------------------------
+Full Name:       High Oil Temperature (Injection Oil)
+Category:        Thermal
+Trigger:         Oil injection temperature exceeds 185°F
+
+NOTE: On CP-300, E11 = HIGH OIL TEMPERATURE (injection oil).
+On CP-200, E11 also = HIGH OIL TEMPERATURE, but in the crankcase.
+The diagnostic approach differs — CP-300 has an oil thermostatic valve.
+
+Immediate Action:
+  1. Check oil cooler condition (plate-and-frame — inspect for fouling)
+  2. Verify thermostatic bypass valve is operating correctly
+     (if stuck open, oil bypasses cooler → high injection temperature)
+  3. For water-cooled units: verify cooling water flow ≥25 GPM and inlet temp <85°F
+  4. Check oil level — low oil level causes oil to circulate faster and run hotter
+  5. Verify correct oil type (IW-ScrewLube 32 synthetic — do NOT use mineral oil)
+Restart Procedure: Correct oil cooling fault; allow oil to cool to <150°F; press RESET; START
+
+-------------------------------------------------------------------------------
+E12 — LOW_OIL_PRESSURE
+-------------------------------------------------------------------------------
+Full Name:       Low Oil Pressure
+Category:        Lubrication
+Trigger:         Oil pressure below 20 PSI for >3 seconds (higher than CP-200's 15 PSI)
+Immediate Action:
+  1. Check oil level on sight glass
+  2. Check oil filter condition — replace if due (1,500-hour interval)
+  3. Verify oil injection strainer is not blocked
+  4. Test oil pressure with calibrated gauge at test port
+Restart Procedure: Correct oil pressure fault; press RESET; press START; verify pressure ≥25 PSI
+
+-------------------------------------------------------------------------------
+E13 — OIL_PRESSURE_SENSOR FAULT
+-------------------------------------------------------------------------------
+Full Name:       Oil Pressure Sensor Fault
+Category:        Lubrication
+Trigger:         Oil pressure transducer signal outside valid range
+Immediate Action: Check transducer wiring; replace if failed (IW-OPS-CP3-01)
+Restart Procedure: Replace sensor; press RESET; press START
+
+-------------------------------------------------------------------------------
+E14 — OIL_LEVEL_LOW
+-------------------------------------------------------------------------------
+Full Name:       Oil Level Low
+Category:        Lubrication
+Trigger:         Oil level float switch indicates low level in sump
+Immediate Action:
+  1. Verify on sight glass; add IW-ScrewLube 32 to FULL mark
+  2. Investigate oil consumption — check oil separator element (replace if overdue)
+  3. Inspect shaft seals for oil leakage
+Restart Procedure: Add oil; press RESET; press START; verify level is at FULL
+
+-------------------------------------------------------------------------------
+E15 — INLET_VALVE_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Inlet Valve Fault
+Category:        Mechanical
+Trigger:         Inlet valve position feedback mismatch for >5 seconds
+Immediate Action: Check pneumatic actuator supply; inspect solenoid valve; check linkage
+Restart Procedure: Correct valve fault; press RESET; press START
+
+-------------------------------------------------------------------------------
+E16 — CAPACITY_VALVE_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Capacity Control Valve Fault
+Category:        Mechanical
+Trigger:         Capacity valve actuator does not respond within 5 seconds
+Immediate Action: Check control signal from IW-CTRL-5000; inspect valve actuator
+Restart Procedure: Correct valve fault; press RESET; press START
+
+-------------------------------------------------------------------------------
+E17 — MOTOR_FREQUENCY_FAULT  *** CRITICAL — READ CAREFULLY ***
+-------------------------------------------------------------------------------
+Full Name:       Motor Frequency Fault (VFD)
+Category:        VFD (Variable Frequency Drive)
+Trigger:         VFD output frequency deviates >±2 Hz from setpoint for >3 seconds
+
+=====================================================================
+!! THIS IS NOT A TEMPERATURE FAULT !!
+!! DO NOT CHECK CONDENSER COILS FOR CP-300 E17 !!
+!! DO NOT CHECK COOLANT LEVEL FOR CP-300 E17 !!
+
+COMPARE WITH CP-200:
+  CP-200 E17 = HIGH DISCHARGE TEMPERATURE (check condenser, cooling fan)
+  CP-300 E17 = MOTOR FREQUENCY FAULT     (check VFD, input power, motor)
+
+A technician trained on CP-200 units who encounters E17 on a CP-300 must
+NOT apply CP-200 diagnostic steps. E17 on CP-300 is a VFD electrical fault.
+=====================================================================
+
+Description:
+  The IW-CTRL-5000 receives the VFD's actual output frequency via the VFD
+  communication link (CANopen or Modbus RTU between VFD and controller).
+  If the actual output frequency deviates from the commanded frequency setpoint
+  by more than ±2 Hz for 3 continuous seconds, E17 is latched.
+
+  This fault indicates the VFD cannot maintain the commanded speed — possible
+  due to firmware issues, input power quality problems, motor faults, or
+  excessive mechanical load causing VFD current limit intervention.
+
+VFD Frequency Deviation Scenarios:
+  Scenario A: VFD firmware bug (most common on early-production units)
+    Early CP-300 units (serial < CP3-202305-0500) have VFD firmware that
+    cannot correctly handle rapid load transitions. During sudden demand
+    drops, the VFD frequency ramps down faster than the motor can follow,
+    causing a brief deviation that triggers E17. Update to firmware 3.2.1
+    resolves this (see Bulletin BULL-2023-008).
+
+  Scenario B: 3-phase input power quality issue
+    Voltage sags, frequency deviations, or phase imbalance cause the VFD
+    DC bus to fluctuate, destabilizing the frequency control loop.
+    Result: VFD output frequency oscillates → E17 triggers.
+
+  Scenario C: VFD parameter mismatch
+    If P1.01 (base frequency) is set to 50 Hz but supply is 60 Hz,
+    the VFD control loop is calibrated incorrectly → persistent E17.
+
+  Scenario D: Motor winding fault
+    A shorted winding turn causes irregular current draw that the VFD
+    current limiting responds to by reducing torque, causing speed drop → E17.
+
+  Scenario E: Mechanical overload
+    Seized bearing, coupling failure, or debris in screw element causes
+    mechanical resistance; VFD reduces frequency to maintain current limit
+    but falls outside ±2 Hz setpoint window → E17.
+
+Immediate Action:
+  1. Access HMI fault log: HMI → Faults → E17 Detail
+     Note: commanded frequency, actual frequency, deviation amount, duration
+  2. CHECK VFD FIRMWARE VERSION:
+     HMI → About → VFD Firmware
+     - If version < 3.2.1 AND serial number < 30500: firmware update is required
+       (refer to Bulletin BULL-2023-008 for update procedure)
+  3. VERIFY VFD PARAMETERS:
+     HMI → Settings → VFD Parameters
+     - P1.01 (Base Frequency): must be 60 for North American 60 Hz supply
+     - P1.02 (Max Frequency): must be ≤75 Hz
+     - P2.01 (Accel Time): must be ≥10 seconds (too fast = overshoot → E17)
+     - P2.02 (Decel Time): must be ≥15 seconds (too fast = undershoot → E17)
+  4. VERIFY 3-PHASE INPUT POWER:
+     Measure L1, L2, L3 at VFD input terminals
+     - Each phase: 460V ±5% (437–483V)
+     - Imbalance: <2% (calculate per NEMA MG1)
+     - Frequency: 60 Hz ±0.5 Hz
+     If power quality is poor, install line reactor or active front-end (consult IW engineering)
+  5. INSPECT MOTOR:
+     - Winding resistance: balanced within 5% (all three phases)
+     - Insulation resistance: >100 MΩ (megohmmeter, 1000V DC test)
+     - Physical: check for bearing noise, coupling condition
+  6. If all checks pass and E17 recurs, export VFD event log:
+     HMI → Faults → Export to USB
+     Send to IndustrialWorks technical support: support@industrialworks.com
+
+Restart Procedure — E17 on CP-300:
+  Step 1: Confirm root cause identified and corrected
+  Step 2: Reset the VFD fault latch:
+          Option A: HMI → Faults → Reset VFD (recommended)
+          Option B: Press physical RESET button on VFD door panel
+  Step 3: Wait for VFD to complete its restart sequence (approximately 10–15 sec)
+          VFD LEDs cycle through: FAULT → INITIALIZING → READY
+  Step 4: HMI should show "VFD READY — SYSTEM OK"
+  Step 5: Press START on HMI
+  Step 6: Monitor VFD output frequency on HMI trend display during soft-start
+          - Expected ramp: 0 → 20 Hz (2 sec), 20 → 45 Hz (15 sec)
+          - Frequency should track setpoint within ±1 Hz throughout ramp
+  Step 7: After reaching steady-state frequency, observe through first
+          load-transition cycle (demand change)
+          - Watch for E17 re-trigger during load transitions
+          - If E17 immediately recurs on load transition after firmware update,
+            verify that accel/decel ramp times are ≥15 seconds (P2.01, P2.02)
+  Step 8: Log in maintenance record:
+          - Date and time of fault and restart
+          - VFD firmware version (before and after update if applicable)
+          - Commanded vs. actual frequency at fault time
+          - Root cause and corrective action
+          - Post-restart frequency stability observations
+
+Associated Documents:
+  - BULL-2023-008: CP-300 VFD Firmware Update Required
+  - CP300-SVC-001: Section 6.2 (E17 Diagnostic Tree) and Section 3.2 (VFD Parameters)
+
+-------------------------------------------------------------------------------
+E18 — VFD_OVERTEMPERATURE
+-------------------------------------------------------------------------------
+Full Name:       VFD Over-Temperature
+Category:        VFD
+Trigger:         VFD heatsink temperature exceeds 85°C (185°F)
+Description:     VFD thermal protection. High VFD temperature indicates cooling failure
+                 or excessive ambient temperature in VFD enclosure.
+Immediate Action:
+  1. Check VFD enclosure air filter (IW-VFDF-CP3-01) — replace if clogged
+  2. Verify VFD cooling fans are operational (audible; check at VFD door)
+  3. Check ambient temperature in VFD enclosure area (max: 40°C / 104°F)
+  4. Verify VFD enclosure door is fully closed and sealed
+  5. Do NOT defeat VFD enclosure door interlock to improve ventilation —
+     this exposes personnel to VFD bus voltage and introduces contaminants
+Restart Procedure: Clear cooling fault; allow VFD to cool to <70°C; press RESET; START
+
+-------------------------------------------------------------------------------
+E19 — VFD_OVERCURRENT
+-------------------------------------------------------------------------------
+Full Name:       VFD Output Overcurrent
+Category:        VFD
+Trigger:         VFD output current exceeds 130% of rated current
+Description:     Instantaneous overcurrent trip. Usually indicates motor fault,
+                 output cable fault, or sudden mechanical jam.
+Immediate Action:
+  1. Check motor insulation resistance (megohmmeter test, minimum 100 MΩ)
+  2. Inspect VFD output cable for damage or phase-to-phase fault
+  3. Check screw element for mechanical jam (attempt manual rotation if safe)
+  4. Verify VFD output cable is not too long (max 100 ft without output reactor)
+Restart Procedure: Correct fault; press RESET on VFD; press RESET on HMI; press START
+
+-------------------------------------------------------------------------------
+E20 — BEARING_TEMPERATURE (Optional)
+-------------------------------------------------------------------------------
+Full Name:       Bearing Temperature High
+Category:        Thermal
+Trigger:         Bearing RTD reading exceeds 220°F (105°C) [optional sensor kit required]
+Note:            Requires IW-BRTD-CP3 bearing RTD kit (optional factory or field installation).
+                 NOT the same as CP-200 E20 (vibration fault on CP-200 vs. bearing temp on CP-300).
+Immediate Action:
+  1. Verify bearing temperature with handheld IR thermometer
+  2. Check oil injection temperature and flow rate to bearing housing
+  3. Remove unit from service for bearing inspection if temp confirmed >200°F
+Restart Procedure: Correct bearing cooling; allow to cool; press RESET; press START
+
+-------------------------------------------------------------------------------
+E21 — AFTERCOOLER_HIGH_TEMP
+-------------------------------------------------------------------------------
+Full Name:       Aftercooler Outlet Temperature High
+Category:        Thermal
+Trigger:         Aftercooler outlet temperature exceeds 130°F
+Immediate Action:
+  1. Verify cooling water flow rate ≥25 GPM (CP-301/302 water-cooled)
+  2. Check cooling water inlet temperature (<85°F)
+  3. Inspect aftercooler plates for fouling or scaling
+Restart Procedure: Correct aftercooler fault; press RESET; press START
+
+-------------------------------------------------------------------------------
+E22 — COOLING_WATER_FLOW
+-------------------------------------------------------------------------------
+Full Name:       Cooling Water Low Flow
+Category:        Cooling
+Trigger:         Cooling water flow rate below 20 GPM (CP-301/302 only)
+Note:            CP-300 (air-cooled) does not have this fault code active.
+Immediate Action:
+  1. Check cooling water supply valve — confirm fully open
+  2. Inspect strainer/Y-filter on cooling water inlet — clean if blocked
+  3. Check cooling water pump operation
+  4. Verify flow meter calibration with bucket test if suspect
+Restart Procedure: Restore cooling water flow to ≥25 GPM; press RESET; press START
+
+-------------------------------------------------------------------------------
+E23 — COOLING_WATER_TEMP
+-------------------------------------------------------------------------------
+Full Name:       Cooling Water High Temperature
+Category:        Cooling
+Trigger:         Cooling water inlet temperature exceeds 90°F (CP-301/302 only)
+Immediate Action:
+  1. Check cooling tower or chiller operation
+  2. Verify cooling water bypass valve is not diverting hot water back to supply
+  3. If ambient temperature is excessively high, reduce cooling load or add cooling capacity
+Restart Procedure: Reduce cooling water temperature to <85°F; press RESET; press START
+
+-------------------------------------------------------------------------------
+E24 — COMMS_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Communications Fault
+Category:        Control
+Trigger:         Modbus/Profibus communication timeout (no response in 10 seconds)
+Note:            Non-trip fault — unit continues to operate; fault is logged.
+Immediate Action: Check network cable connections; verify SCADA address settings;
+                  acknowledge and monitor if standalone operation is acceptable
+Restart Procedure: N/A — non-trip fault
+
+-------------------------------------------------------------------------------
+E25 — CONTROL_BOARD_FAULT
+-------------------------------------------------------------------------------
+Full Name:       Control Board Fault
+Category:        Control
+Trigger:         IW-CTRL-5000 internal self-test failure
+Immediate Action: Attempt one power cycle; if fault returns, contact IndustrialWorks support
+Restart Procedure: Controller board replacement required; factory service
+
+================================================================================
+VFD STATUS LED CODES — QUICK REFERENCE (CP-300 SERIES)
+================================================================================
+
+VFD LEDs are visible through the VFD door inspection window.
+
+LED State          | Color  | Meaning
+-------------------|--------|---------------------------------------------------
+POWER              | GREEN  | VFD powered; DC bus energized
+RUN                | GREEN  | VFD running (outputting frequency)
+FAULT              | RED    | Active fault — check HMI or VFD fault display
+COMMS              | AMBER  | Communicating with IW-CTRL-5000 (should blink)
+READY              | GREEN  | VFD ready for start command (no active fault)
+DC BUS ACTIVE      | RED    | DC bus voltage present (DANGER — >750V in enclosure)
+VFD TEMP           | AMBER  | VFD temperature warning (>75°C); will trip at >85°C (E18)
+
+DANGER: DC BUS ACTIVE indicator means bus voltage (up to 750V) is present.
+Do not open VFD enclosure while DC BUS ACTIVE is lit. Wait ≥10 minutes after
+power-off for capacitors to discharge before opening VFD enclosure for service.
+
+================================================================================
+VFD PARAMETER REFERENCE — KEY PARAMETERS (CP-300 SERIES)
+================================================================================
+
+Parameter  | Name                  | Default  | Allowable Range | Notes
+-----------|-----------------------|----------|-----------------|------------------------------
+P1.01      | Base Frequency        | 60 Hz    | 50–60 Hz        | Must match supply frequency
+P1.02      | Maximum Frequency     | 65 Hz    | 50–75 Hz        | Do not exceed 75 Hz
+P1.03      | Minimum Frequency     | 20 Hz    | 10–30 Hz        | Prevents stall at low speed
+P2.01      | Accel Ramp Time       | 15 sec   | 5–60 sec        | Too fast → E17 overshoot
+P2.02      | Decel Ramp Time       | 20 sec   | 5–60 sec        | Too fast → E17 undershoot
+P3.01      | Current Limit         | 110%     | 100–130%        | Match to motor FLA
+P4.01      | Freq Deviation Limit  | 2.0 Hz   | 1.0–5.0 Hz      | E17 trigger threshold
+P4.02      | Freq Deviation Time   | 3.0 sec  | 1.0–10.0 sec    | E17 time before fault latches
+P5.01      | VFD Comm Address      | 1        | 1–247           | Modbus address
+P5.02      | VFD Comm Baud Rate    | 19200    | 9600–115200     | Must match CTRL-5000 setting
+
+================================================================================
+END OF DOCUMENT
+Document ID: CP300-ERR-001  |  Revision: 2  |  Date: 2024-03-01
+IndustrialWorks Corporation — Confidential Technical Documentation
+================================================================================
