@@ -5,7 +5,7 @@
 [![Hackathon](https://img.shields.io/badge/Hackathon-YC%20Fall%202026%20%C3%97%20Moss-orange)](https://moss.dev)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://python.org)
-[![Next.js](https://img.shields.io/badge/Next.js-15%2F16%20Active%20LTS-black)](https://nextjs.org)
+[![Next.js](https://img.shields.io/badge/Next.js-15.5%20App%20Router-black)](https://nextjs.org)
 [![LiveKit](https://img.shields.io/badge/LiveKit-Agents%201.x-cyan)](https://livekit.io)
 [![Embedded Moss](https://img.shields.io/badge/Retrieval-Embedded%20Moss%20Runtime-red)](https://moss.dev)
 
@@ -135,10 +135,12 @@ fieldops-voice-copilot/
 ├── backend/                    # Control Plane (FastAPI + SQLAlchemy)
 │   ├── app/                    # REST API, Auth, Sessions, Assets, Privacy
 │   └── tests/                  # Security & session tests (7 passing tests)
-├── frontend/                   # Next.js 15/16 Active LTS Technician Workstation
+├── frontend/                   # Next.js 15 App Router Technician Workstation
 │   ├── app/                    # App Router (page.tsx, layout.tsx)
 │   ├── components/             # Voice visualizer, EvidencePanel, LiveKit session
+│   ├── lib/                    # API client bindings
 │   └── types/                  # TypeScript interface contracts
+├── architecture/               # System architecture specification & diagrams
 ├── knowledge/                  # Industrial Equipment Documentation Corpus
 │   ├── manuals/                # CP-200 & CP-300 synthetic service manuals
 │   ├── error-codes/            # CP-200 & CP-300 error code quick references

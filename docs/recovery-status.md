@@ -63,7 +63,7 @@ A full filesystem audit was conducted on `c:\fieldops-voice-copilott` following 
    - `knowledge/sops/` and `knowledge/bulletins/` — Operational documents completing the corpus.
    - `knowledge/metadata/index_metadata.json` — Manifest of indexed documents.
 3. **Frontend (`frontend/`):**
-   - Next.js application (using Active LTS Next.js 15/16 with Tailwind CSS, TypeScript, and `@livekit/components-react`).
+   - Next.js application (using Next.js 15 App Router with Tailwind CSS, TypeScript, and `@livekit/components-react`).
 4. **Evaluation & Benchmarks (`evaluation/`):**
    - `evaluation/queries.json` — 30–50 synthetic evaluation queries covering all 12 test categories.
    - `evaluation/benchmark.py` — Latency benchmarking harness (Moss retrieval, gate, LLM, grounding, TTS).
@@ -92,7 +92,7 @@ A full filesystem audit was conducted on `c:\fieldops-voice-copilott` following 
 
 ### 3. Next.js Version Upgrade
 - **Issue:** Old plan specified Next.js 14, which is obsolete/unsupported.
-- **Correction:** Using currently supported Active LTS Next.js (Next.js 15+ / 16.x) verified against Node 20.20.2.
+- **Correction:** Using modern Next.js (Next.js 15.5+ App Router) verified against Node 20.20.2.
 
 ---
 

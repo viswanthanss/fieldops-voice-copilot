@@ -1,0 +1,58 @@
+{
+  "benchmark_summary": {
+    "total_queries": 36,
+    "iterations_per_query": 3,
+    "total_evaluations": 108,
+    "gate_decisions_breakdown": {
+      "PASS": 57,
+      "FAIL_UNAUTHORIZED": 39,
+      "FAIL_EQUIPMENT_MISMATCH": 6,
+      "FAIL_NO_EVIDENCE": 6
+    }
+  },
+  "published_moss_reference": {
+    "dataset": "Moss 100k Technical Corpus",
+    "retrieval_p50_ms": 3.8,
+    "retrieval_p95_ms": 7.4,
+    "retrieval_p99_ms": 11.2,
+    "notes": "Published benchmark from Moss documentation on embedded in-process runtime with preloaded index."
+  },
+  "project_targets": {
+    "query_normalization_p95_ms": 1.5,
+    "authorization_check_p95_ms": 1.0,
+    "moss_retrieval_p95_ms": 10.0,
+    "evidence_gate_p95_ms": 2.0,
+    "llm_generation_p95_ms": 650.0,
+    "grounding_validation_p95_ms": 400.0,
+    "end_to_end_voice_turn_p95_ms": 1200.0
+  },
+  "measured_results": {
+    "normalization": {
+      "p50_ms": 0.077,
+      "p95_ms": 0.175,
+      "p99_ms": 0.402
+    },
+    "authorization": {
+      "p50_ms": 0.005,
+      "p95_ms": 0.121,
+      "p99_ms": 0.237
+    },
+    "moss_retrieval": {
+      "status": "not_run",
+      "reason": "MOSS_PROJECT_ID and MOSS_PROJECT_KEY not provided. Synthetic measurements strictly prohibited.",
+      "p50_ms": null,
+      "p95_ms": null,
+      "p99_ms": null
+    },
+    "evidence_gate": {
+      "p50_ms": 0.146,
+      "p95_ms": 0.491,
+      "p99_ms": 0.546
+    },
+    "pre_llm_local_cpu_total": {
+      "p50_ms": 0.198,
+      "p95_ms": 0.628,
+      "p99_ms": 0.848
+    }
+  }
+}
