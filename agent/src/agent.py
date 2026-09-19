@@ -19,15 +19,26 @@ from typing import Any, Dict, List, Optional
 import structlog
 from openai import AsyncOpenAI
 
-from .authorization import AuthorizationDeniedError, build_moss_metadata_filter, verify_retrieval_scope
-from .config import AgentConfig, config
-from .evidence_gate import GateDecision, run_evidence_gate
-from .grounding import validate_grounding
-from .normalizer import normalize_query
-from .prompts import PROMPT_HASH, PROMPT_VERSION, build_response_messages
-from .retrieval import MossRetriever
-from .session import create_session_store
-from .telemetry import get_tracer, setup_telemetry
+try:
+    from .authorization import AuthorizationDeniedError, build_moss_metadata_filter, verify_retrieval_scope
+    from .config import AgentConfig, config
+    from .evidence_gate import GateDecision, run_evidence_gate
+    from .grounding import validate_grounding
+    from .normalizer import normalize_query
+    from .prompts import PROMPT_HASH, PROMPT_VERSION, build_response_messages
+    from .retrieval import MossRetriever
+    from .session import create_session_store
+    from .telemetry import get_tracer, setup_telemetry
+except ImportError:
+    from authorization import AuthorizationDeniedError, build_moss_metadata_filter, verify_retrieval_scope
+    from config import AgentConfig, config
+    from evidence_gate import GateDecision, run_evidence_gate
+    from grounding import validate_grounding
+    from normalizer import normalize_query
+    from prompts import PROMPT_HASH, PROMPT_VERSION, build_response_messages
+    from retrieval import MossRetriever
+    from session import create_session_store
+    from telemetry import get_tracer, setup_telemetry
 
 logger = structlog.get_logger(__name__)
 tracer = get_tracer()

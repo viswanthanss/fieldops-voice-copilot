@@ -43,6 +43,57 @@ async def create_tables() -> None:
     logger.info("Database tables created/verified.")
 
 
+async def seed_dev_data() -> None:
+    """Seed initial development technician and assets if not present."""
+    from sqlalchemy import select
+    from app.models import User, Asset
+    from app.auth import hash_password
+
+    async with AsyncSessionLocal() as session:
+        res = await session.execute(select(User).where(User.email == "tech@industrial.test"))
+        if not res.scalar_one_or_none():
+            user = User(
+                email="tech@industrial.test",
+                hashed_password=hash_password("SafePassword123!"),
+                tenant_id="demo",
+                site_ids=["SITE-A"],
+                roles=["technician"],
+                is_active=True,
+            )
+            session.add(user)
+
+        res = await session.execute(select(Asset).where(Asset.asset_id == "CP-204"))
+        if not res.scalar_one_or_none():
+            session.add(
+                Asset(
+                    asset_id="CP-204",
+                    tenant_id="demo",
+                    site_id="SITE-A",
+                    equipment_type="compressor",
+                    model="CP-200",
+                    status="operational",
+                    authorized_roles=["technician"],
+                )
+            )
+
+        res = await session.execute(select(Asset).where(Asset.asset_id == "CP-301"))
+        if not res.scalar_one_or_none():
+            session.add(
+                Asset(
+                    asset_id="CP-301",
+                    tenant_id="demo",
+                    site_id="SITE-A",
+                    equipment_type="compressor",
+                    model="CP-300",
+                    status="operational",
+                    authorized_roles=["technician"],
+                )
+            )
+
+        await session.commit()
+    logger.info("Development demo user and assets seeded.")
+
+
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     FastAPI dependency that provides an async database session.

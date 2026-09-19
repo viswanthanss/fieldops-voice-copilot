@@ -34,7 +34,7 @@ from app.auth import (
     verify_password,
 )
 from app.config import settings
-from app.db import create_tables, get_db
+from app.db import create_tables, get_db, seed_dev_data
 from app.models import Asset, Feedback, User
 from app.rate_limit import limiter
 from app.sessions import initialize_session
@@ -59,6 +59,11 @@ async def lifespan(app: FastAPI):
         logger.critical("FATAL: Weak SECRET_KEY detected in production. Aborting.")
         raise RuntimeError("Production SECRET_KEY must not use the development default.")
     await create_tables()
+    if settings.ENVIRONMENT == "development":
+        try:
+            await seed_dev_data()
+        except Exception as exc:
+            logger.warning("dev_data_seed_skipped", error=str(exc))
     logger.info("FieldOps backend started -- environment=%s", settings.ENVIRONMENT)
     yield
     logger.info("FieldOps backend shutting down.")
